@@ -15,7 +15,9 @@
   background: rgba(247, 247, 247, 1) !important;
 }
 .input-group-text {
-  border: none !important;
-  border-right: 2px solid !important;
+border: none !important;
+}
+.form-body {
+  width: 764px !important;
 }
 
