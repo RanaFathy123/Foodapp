@@ -22,7 +22,7 @@ export default function ForgetPassword() {
       toast.success("Email Sent Successfully");
       setTimeout(() => {
         navigate("/resetpass");
-      }, 1500);
+      }, 700);
     } catch (error) {
       toast.error(error.response.data.message);
     }
