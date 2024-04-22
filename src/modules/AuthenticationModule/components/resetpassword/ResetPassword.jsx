@@ -9,7 +9,8 @@ import { Link, useNavigate } from "react-router-dom";
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
   const [checkShowPassword, setCheckShowPassword] = useState(false);
-  const [checkShowConfirmPassword, setCheckShowConfirmPassword] = useState(false);
+  const [checkShowConfirmPassword, setCheckShowConfirmPassword] =
+    useState(false);
 
   const {
     register,
@@ -28,7 +29,7 @@ export default function ResetPassword() {
       toast.success("Password Changed Successfully");
       setTimeout(() => {
         navigate("/login");
-      }, 1500);
+      }, 700);
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -112,7 +113,7 @@ export default function ResetPassword() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
-                      <span className="input-group-text" id="basic-addon1">
+                    <span className="input-group-text" id="basic-addon1">
                       {checkShowPassword ? (
                         <i
                           className="fa-solid fa-eye"
@@ -136,7 +137,7 @@ export default function ResetPassword() {
                       <i className="fa fa-key"></i>
                     </span>
                     <input
-                       type={checkShowConfirmPassword ? "text" : "password"}
+                      type={checkShowConfirmPassword ? "text" : "password"}
                       className="form-control"
                       placeholder="Confirm Password"
                       {...register("confirmPassword", {
@@ -149,7 +150,7 @@ export default function ResetPassword() {
                           value == password || "Password do not match",
                       })}
                     />
-                      <span className="input-group-text" id="basic-addon1">
+                    <span className="input-group-text" id="basic-addon1">
                       {checkShowConfirmPassword ? (
                         <i
                           className="fa-solid fa-eye"
