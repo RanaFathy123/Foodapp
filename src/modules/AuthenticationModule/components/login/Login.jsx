@@ -23,9 +23,10 @@ export default function Login() {
       );
       console.log(response);
       toast.success("Login Successfully");
+      localStorage.setItem('token',response.data.token)
       setTimeout(() => {
         navigate("/dashboard");
-      }, 1500);
+      },700);
     } catch (error) {
       toast.error(error.response.data.message);
     }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Dashboard from "./modules/HomeModule/components/Dashboard/Dashboard";
@@ -14,15 +14,32 @@ import ForgetPassword from "./modules/AuthenticationModule/components/forgetpass
 import ResetPassword from "./modules/AuthenticationModule/components/resetpassword/ResetPassword";
 import ChangePassword from "./modules/AuthenticationModule/components/changepassword/ChangePassword";
 import { ToastContainer } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+import ProtectedRoute from "./modules/SharedModule/components/ProtectedRoute/ProtectedRoute";
 
 function App() {
+  const [loginData, setLoginData] = useState(null);
+  let saveLoginData = () => {
+    let encodedData = localStorage.getItem("token");
+    let decodedDeata = jwtDecode(encodedData);
+    setLoginData(decodedDeata);
+  };
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      saveLoginData();
+    }
+  }, []);
   const routes = createBrowserRouter([
     {
       path: "/dashboard",
-      element: <MasterLayout />,
+      element: (
+        <ProtectedRoute loginData={loginData}>
+          <MasterLayout />
+        </ProtectedRoute>
+      ),
       errorElement: <NotFound />,
       children: [
-        { path: "", element: <Dashboard /> },
+        { index:true, element: <Dashboard /> },
         { path: "reciepes", element: <ReciepesList /> },
         { path: "categories", element: <CategoriesList /> },
         { path: "users", element: <UsersList /> },
