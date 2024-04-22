@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const {
@@ -109,9 +109,12 @@ export default function Login() {
                   )}
                   <div className="links d-flex justify-content-between my-4">
                     <a>Register Now?</a>
-                    <a className="text-success text-decoration-none ">
+                    <Link
+                      to="/forgetpass"
+                      className="text-success text-decoration-none "
+                    >
                       Forgot Password?
-                    </a>
+                    </Link>
                   </div>
                   <button className="btn btn-success  w-100">Login</button>
                 </form>

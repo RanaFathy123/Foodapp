@@ -13,6 +13,7 @@ import Register from "./modules/AuthenticationModule/components/register/Registe
 import ForgetPassword from "./modules/AuthenticationModule/components/forgetpassword/ForgetPassword";
 import ResetPassword from "./modules/AuthenticationModule/components/resetpassword/ResetPassword";
 import ChangePassword from "./modules/AuthenticationModule/components/changepassword/ChangePassword";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const routes = createBrowserRouter([
@@ -45,7 +46,11 @@ function App() {
       ],
     },
   ]);
-  return <RouterProvider router={routes}></RouterProvider>;
+  return (
+    <RouterProvider router={routes}>
+      <ToastContainer />
+    </RouterProvider>
+  );
 }
 
 export default App;
