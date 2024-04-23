@@ -6,14 +6,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login({ saveLoginData }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-
   const [checkShowPassword, setCheckShowPassword] = useState(false);
   const onSubmit = async (data) => {
     try {
@@ -23,10 +22,9 @@ export default function Login() {
       );
       console.log(response);
       toast.success("Login Successfully");
-      localStorage.setItem('token',response.data.token)
-      setTimeout(() => {
-        navigate("/dashboard");
-      },700);
+      localStorage.setItem("token", response.data.token);
+      saveLoginData();
+      navigate("/dashboard");
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -36,7 +34,6 @@ export default function Login() {
   };
   return (
     <>
-      <ToastContainer />
       <div className="auth-bg ">
         <div className="container-fluid bg-overlay">
           <div className="row vh-100 justify-content-center align-items-center">

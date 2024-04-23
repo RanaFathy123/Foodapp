@@ -27,9 +27,7 @@ export default function ResetPassword() {
       );
       console.log(response);
       toast.success("Password Changed Successfully");
-      setTimeout(() => {
-        navigate("/login");
-      }, 700);
+      navigate("/login");
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -42,7 +40,6 @@ export default function ResetPassword() {
   };
   return (
     <>
-      <ToastContainer />
       <div className="auth-bg ">
         <div className="container-fluid bg-overlay">
           <div className="row vh-100 justify-content-center align-items-center">

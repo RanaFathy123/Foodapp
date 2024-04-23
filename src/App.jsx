@@ -34,12 +34,12 @@ function App() {
       path: "/dashboard",
       element: (
         <ProtectedRoute loginData={loginData}>
-          <MasterLayout />
+          <MasterLayout setLoginData={setLoginData} />
         </ProtectedRoute>
       ),
       errorElement: <NotFound />,
       children: [
-        { index:true, element: <Dashboard /> },
+        { index: true, element: <Dashboard /> },
         { path: "reciepes", element: <ReciepesList /> },
         { path: "categories", element: <CategoriesList /> },
         { path: "users", element: <UsersList /> },
@@ -51,7 +51,7 @@ function App() {
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Login /> },
-        { path: "login", element: <Login /> },
+        { path: "login", element: <Login saveLoginData={saveLoginData} /> },
         { path: "register", element: <Register /> },
         { path: "forgetpass", element: <ForgetPassword /> },
         { path: "resetpass", element: <ResetPassword /> },
@@ -64,9 +64,10 @@ function App() {
     },
   ]);
   return (
-    <RouterProvider router={routes}>
+    <>
       <ToastContainer />
-    </RouterProvider>
+      <RouterProvider router={routes}></RouterProvider>
+    </>
   );
 }
 

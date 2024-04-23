@@ -20,16 +20,14 @@ export default function ForgetPassword() {
       );
       console.log(response);
       toast.success("Email Sent Successfully");
-      setTimeout(() => {
-        navigate("/resetpass");
-      }, 700);
+
+      navigate("/resetpass");
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
   return (
     <>
-      <ToastContainer />
       <div className="auth-bg ">
         <div className="container-fluid bg-overlay">
           <div className="row vh-100 justify-content-center align-items-center">
@@ -44,7 +42,7 @@ export default function ForgetPassword() {
                   password reset link
                 </p>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="input-group mb-5">
+                  <div className="input-group mb-3">
                     <span className="input-group-text" id="basic-addon1">
                       <i className="fa fa-envelope"></i>
                     </span>
@@ -61,12 +59,13 @@ export default function ForgetPassword() {
                         },
                       })}
                     />
+                   
                   </div>
                   {errors.email && (
-                    <div className="text-danger m-4">
-                      {errors.email.message}
-                    </div>
-                  )}
+                      <p className="text-danger m-2">
+                        {errors.email.message}
+                      </p>
+                    )}
                   <button className="btn btn-success  w-100">Submit</button>
                 </form>
               </div>
