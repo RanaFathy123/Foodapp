@@ -15,9 +15,14 @@
   background: rgba(247, 247, 247, 1) !important;
 }
 .input-group-text {
-border: none !important;
+  border: none !important;
 }
 .form-body {
   width: 764px !important;
 }
 
+.notfound-bg {
+  background-image: url(./assets/images/notfoundbg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
