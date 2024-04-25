@@ -16,6 +16,7 @@ import ChangePassword from "./modules/AuthenticationModule/components/changepass
 import { ToastContainer } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import ProtectedRoute from "./modules/SharedModule/components/ProtectedRoute/ProtectedRoute";
+import AuthProtectedRoute from "./modules/SharedModule/components/ProtectedRoute/AuthProtectedRoute";
 
 function App() {
   const [loginData, setLoginData] = useState(null);
@@ -47,10 +48,14 @@ function App() {
     },
     {
       path: "/",
-      element: <AuthenticationLayout />,
+      element: (
+        <AuthProtectedRoute loginData={loginData}>
+          <AuthenticationLayout />
+        </AuthProtectedRoute>
+      ),
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Login /> },
+        { index: true, element: <Login saveLoginData={saveLoginData} /> },
         { path: "login", element: <Login saveLoginData={saveLoginData} /> },
         { path: "register", element: <Register /> },
         { path: "forgetpass", element: <ForgetPassword /> },

@@ -19,7 +19,7 @@ export default function ForgetPassword() {
         data
       );
       console.log(response);
-      toast.success("Email Sent Successfully");
+      toast.success(response.data.message);
 
       navigate("/resetpass");
     } catch (error) {

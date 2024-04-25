@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function ResetPassword() {
-  const [password, setPassword] = useState("");
   const [checkShowPassword, setCheckShowPassword] = useState(false);
   const [checkShowConfirmPassword, setCheckShowConfirmPassword] =
     useState(false);
@@ -16,6 +15,7 @@ export default function ResetPassword() {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ export default function ResetPassword() {
         data
       );
       console.log(response);
-      toast.success("Password Changed Successfully");
+      toast.success(response.data.message);
       navigate("/login");
     } catch (error) {
       toast.error(error.response.data.message);
@@ -107,8 +107,6 @@ export default function ResetPassword() {
                           message: "Password Must Be 6 Character",
                         },
                       })}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <span className="input-group-text" id="basic-addon1">
                       {checkShowPassword ? (
@@ -144,7 +142,7 @@ export default function ResetPassword() {
                           message: "Password Must Be 6 Character",
                         },
                         validate: (value) =>
-                          value == password || "Password do not match",
+                          watch("password") == value || "Password do not match",
                       })}
                     />
                     <span className="input-group-text" id="basic-addon1">

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export default function NotFound() {
   const navigate = useNavigate();
   const gotToHome = () => {
-    navigate("/");
+    navigate("/dashboard");
   };
   return (
     <div className="container-fluid">
