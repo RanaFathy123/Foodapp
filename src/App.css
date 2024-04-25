@@ -22,7 +22,7 @@
 }
 
 .notfound-bg {
-  background-image: url(./assets/images/notfoundbg.jpg);
+  background-image: url(./assets/images/not-found-bg.png);
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 100% 100%;
 }

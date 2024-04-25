@@ -20,7 +20,6 @@ export default function Login({ saveLoginData }) {
         "https://upskilling-egypt.com:3006/api/v1/Users/Login",
         data
       );
-      console.log(response);
       toast.success("Login Successfully");
       localStorage.setItem("token", response.data.token);
       saveLoginData();

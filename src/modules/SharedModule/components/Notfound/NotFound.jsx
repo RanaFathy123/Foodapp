@@ -9,14 +9,17 @@ export default function NotFound() {
     navigate("/dashboard");
   };
   return (
-    <div className="container-fluid">
-      <img src={logo} className="m-2" />
-      <div className="container-fluid notfound-bg vh-100">
-        <div className="row align-items-center justify-content-center vh-100">
-          <div className="col-md-6 col-sm-10 ">
+    <div className="notfound-bg">
+      <div className="container">
+        <img src={logo} />
+        <div className="row align-items-center vh-100 ">
+          <div className="col-md-6">
             <h1 className="mb-3">Oops.</h1>
-            <h3 className="text-success mb-3">Page not found</h3>
-            <p className="mb-4"  style={{ height: "39.61px", width: "302.36px" }}>
+            <h4 className="text-success mb-3">Page not found</h4>
+            <p
+              className="mb-4"
+              style={{ height: "39.61px", width: "302.36px" }}
+            >
               This Page doesn’t exist or was removed! We suggest you back to
               home
             </p>
@@ -24,9 +27,6 @@ export default function NotFound() {
               <i className="fa fa-arrow-left m-3" aria-hidden="true" />
               Back To Home
             </button>
-          </div>
-          <div className="col-md-4 col-sm-10 text-center">
-            <img src={notfound} className="m-3 img-fluid" />
           </div>
         </div>
       </div>
