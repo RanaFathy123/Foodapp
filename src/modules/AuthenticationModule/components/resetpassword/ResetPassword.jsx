@@ -42,7 +42,7 @@ export default function ResetPassword() {
     <>
       <div className="auth-bg ">
         <div className="container-fluid bg-overlay">
-          <div className="row vh-100 justify-content-center align-items-center">
+          <div className="row min-vh-100 justify-content-center align-items-center">
             <div className="col-md-9 bg-white p-5 border rounded border-2 form-body">
               <div className="text-center">
                 <img src={logo} alt="" className="w-25" />
