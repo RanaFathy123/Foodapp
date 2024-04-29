@@ -1,17 +1,270 @@
-import React from 'react'
-import Header from '../../../SharedModule/components/Header/Header'
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import { useForm } from "react-hook-form";
 import categoriesHeaderImg from "../../../../assets/images/header.png";
+import NoData from "../../../SharedModule/components/NoData/NoData";
+import Header from "../../../SharedModule/components/Header/Header";
+import { toast } from "react-toastify";
+import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 
 export default function CategoriesList() {
+  const [categoriesList, setCategoriesList] = useState([]);
+  const [category, setCategory] = useState({});
+  const [modalTitle, setModalTitle] = useState("");
+  const [mode, setMode] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const addBtn = useRef();
+  const [show, setShow] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const handleShow = (data) => {
+    if (data.target) {
+      setMode("addMode");
+      setModalTitle("Add New Category");
+      setShow(true);
+    } else {
+      setMode("updateMode");
+      setModalTitle("Update Category");
+      setCategoryId(data);
+      setShow(true);
+      reset({ name: "" });
+      getCategory(categoryId);
+    }
+  };
+  const handleClose = () => {
+    reset({ name: "" });
+    setShow(false);
+  };
+  const handleShowDelete = (id) => {
+    setShowDelete(true);
+    setCategoryId(id);
+  };
+  const handleCloseDelete = () => {
+    setShowDelete(false);
+  };
+  const getCategory = async (id) => {
+    try {
+      const response = await axios.get(
+        `https://upskilling-egypt.com:3006/api/v1/Category/${id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      setCategory(response.data);
+      reset({name:''})
+      reset({ name: response.data.name });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getCategories = async () => {
+    try {
+      const response = await axios.get(
+        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1",
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      setCategoriesList(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const addcategory = async (data) => {
+    try {
+      const response = await axios.post(
+        "https://upskilling-egypt.com:3006/api/v1/Category/",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const editCategory = async (data) => {
+    try {
+      const response = await axios.put(
+        `https://upskilling-egypt.com:3006/api/v1/Category/${categoryId}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteCategory = async () => {
+    try {
+      const response = await axios.delete(
+        `https://upskilling-egypt.com:3006/api/v1/Category/${categoryId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    getCategories();
+    handleCloseDelete();
+    toast.error("category Deleted");
+  };
+
+  const onSubmit = async (data) => {
+    if (mode == "addMode") {
+      addcategory(data);
+      reset({ name: "" });
+      getCategories();
+      handleClose();
+      toast.success("Category Add Successfully");
+    } else if (mode == "updateMode") {
+      editCategory(data);
+      reset({ name: "" });
+      getCategories();
+      handleClose();
+      toast.success("Category Edited Successfully");
+    }
+  };
+  useEffect(() => {
+    getCategories();
+  }, []);
+  useEffect(() => {
+    if (mode == "updateMode") {
+      getCategory(categoryId);
+    }
+  }, [categoryId, mode]);
+
   return (
-    <div>
-    <Header
-      title={"Categories Items"}
-      description={
-        "You can now add your items that any user can order it from the Application and you can edit"
-      }
-      imgUrl={categoriesHeaderImg}
-    />
-  </div>
-  )
+    <>
+      <Modal show={showDelete} onHide={handleCloseDelete}>
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          <DeleteData title={"Category"} />
+          <button
+            onClick={deleteCategory}
+            className="btn btn-danger ms-auto d-block "
+          >
+            Delete
+          </button>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <h3>{modalTitle}</h3>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="d-flex flex-column ">
+              <input
+                type="text"
+                className="form-control mt-5 mb-4"
+                placeholder={mode == "addMode" ? "Enter Category" : "Loading.."}
+                {...register("name", {
+                  required: "Name is Required",
+                })}
+              />
+              {errors.name && (
+                <div className="text-danger m-4">{errors.name.message}</div>
+              )}
+            </div>
+            <button className="btn btn-success ms-auto d-block ">
+              Save Changes
+            </button>
+          </form>
+        </Modal.Body>
+      </Modal>
+      <Header
+        title={"Categories Items"}
+        description={
+          "You can now add your items that any user can order it from the Application and you can edit"
+        }
+        imgUrl={categoriesHeaderImg}
+      />
+      <div className="container-fluid mt-3 mb-2 px-2 w-100">
+        <div className="d-flex flex-wrap justify-content-between  align-items-center container">
+          <div>
+            <h4>Categories Table Details</h4>
+            <p>You can check all details</p>
+          </div>
+          <div>
+            <button
+              ref={addBtn}
+              className="btn btn-success"
+              onClick={handleShow}
+            >
+              Add New Category
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="table-responsive  px-3 border-none ">
+        <table className="table align-middle mb-0 rounded p-5 w-100 table-borderless">
+          <thead className="bg-primary text-white bg-info h-100 table-secondary  p-5">
+            <tr>
+              <th className="p-4 ">Name</th>
+              <th className="py-4"></th>
+              <th className="py-4"></th>
+              <th className="p-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="p-4">
+            {categoriesList.length > 0 &&
+              categoriesList.map((category) => (
+                <tr key={category.id}>
+                  <td>
+                    <p className="fw-normal mb-1">{category.name}</p>
+                  </td>
+                  <td>
+                    <div className="d-flex align-items-center">
+                      <div className="ms-3">
+                        <p className="text-muted mb-0">
+                          {category.creationDate}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p className="text-muted mb-0">
+                      {category.modificationDate}
+                    </p>
+                  </td>
+                  <td>
+                    <div className="d-flex gap-3 align-items-center ">
+                      <i className="fa fa-eye text-primary "></i>
+                      <i
+                        className="fa fa-edit text-warning"
+                        onClick={() => handleShow(category.id)}
+                      ></i>
+                      <i
+                        className="fa fa-trash text-danger "
+                        onClick={() => handleShowDelete(category.id)}
+                      ></i>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        {categoriesList.length == 0 && <NoData />}
+      </div>
+    </>
+  );
 }
