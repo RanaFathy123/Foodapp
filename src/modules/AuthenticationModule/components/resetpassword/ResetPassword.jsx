@@ -42,7 +42,7 @@ export default function ResetPassword() {
     <>
       <div className="auth-bg ">
         <div className="container-fluid bg-overlay">
-          <div className="row min-vh-100 justify-content-center align-items-center">
+          <div className="row min-vh-100 h-100 justify-content-center align-items-center">
             <div className="col-md-9 bg-white p-5 border rounded border-2 form-body">
               <div className="text-center">
                 <img src={logo} alt="" className="w-25" />
@@ -59,7 +59,7 @@ export default function ResetPassword() {
                     </span>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-control border-start border-secondary"
                       placeholder="Enter Your E-mail"
                       {...register("email", {
                         required: "Email is Required",
@@ -82,7 +82,7 @@ export default function ResetPassword() {
                     </span>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-control border-start border-secondary"
                       placeholder="OTP"
                       {...register("seed", {
                         required: "OTP IS Required",
@@ -98,7 +98,7 @@ export default function ResetPassword() {
                     </span>
                     <input
                       type={checkShowPassword ? "text" : "password"}
-                      className="form-control"
+                      className="form-control border-start border-secondary"
                       placeholder="Password"
                       {...register("password", {
                         required: "Password is Required",
@@ -133,7 +133,7 @@ export default function ResetPassword() {
                     </span>
                     <input
                       type={checkShowConfirmPassword ? "text" : "password"}
-                      className="form-control"
+                      className="form-control border-start border-secondary"
                       placeholder="Confirm Password"
                       {...register("confirmPassword", {
                         required: "Confirm Password is Required",

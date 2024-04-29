@@ -3,10 +3,10 @@ import adminImg from "../../../../assets/images/avatar.png";
 
 export default function NavBar({ loginData }) {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light p-0 mb-3">
       <div className="container-fluid">
         <button
-          className="navbar-toggler ms-auto"
+          className="navbar-toggler ms-auto "
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"

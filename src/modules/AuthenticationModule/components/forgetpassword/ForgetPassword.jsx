@@ -30,7 +30,7 @@ export default function ForgetPassword() {
     <>
       <div className="auth-bg ">
         <div className="container-fluid bg-overlay">
-          <div className="row min-vh-100 justify-content-center align-items-center">
+          <div className="row min-vh-100 h-100 justify-content-center align-items-center">
             <div className="col-md-9 bg-white p-5 border rounded border-2 form-body">
               <div className="text-center">
                 <img src={logo} alt="" className="w-25 m-3" />
@@ -42,13 +42,13 @@ export default function ForgetPassword() {
                   password reset link
                 </p>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="input-group mb-3">
+                  <div className="input-group mb-5">
                     <span className="input-group-text" id="basic-addon1">
                       <i className="fa fa-envelope"></i>
                     </span>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-control border-start border-secondary"
                       placeholder="Enter Your E-mail"
                       {...register("email", {
                         required: "Email is Required",
@@ -62,7 +62,7 @@ export default function ForgetPassword() {
                    
                   </div>
                   {errors.email && (
-                      <p className="text-danger m-2">
+                      <p className="text-danger ">
                         {errors.email.message}
                       </p>
                     )}

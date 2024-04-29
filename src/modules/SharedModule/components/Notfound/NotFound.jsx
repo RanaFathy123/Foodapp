@@ -11,8 +11,8 @@ export default function NotFound() {
   return (
     <div className="notfound-bg">
       <div className="container">
-        <img src={logo} />
-        <div className="row align-items-center vh-100 ">
+        <img src={logo} alt="logo" />
+        <div className="row align-items-center  vh-100 ">
           <div className="col-md-6">
             <h1 className="mb-3">Oops.</h1>
             <h4 className="text-success mb-3">Page not found</h4>
@@ -23,7 +23,10 @@ export default function NotFound() {
               This Page doesn’t exist or was removed! We suggest you back to
               home
             </p>
-            <button className="btn btn-success" onClick={gotToHome}>
+            <button
+              className="btn btn-success p-2 text-center"
+              onClick={gotToHome}
+            >
               <i className="fa fa-arrow-left m-3" aria-hidden="true" />
               Back To Home
             </button>

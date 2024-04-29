@@ -35,7 +35,7 @@ export default function Login({ saveLoginData }) {
     <>
       <div className="auth-bg ">
         <div className="container-fluid bg-overlay">
-          <div className="row min-vh-100 justify-content-center align-items-center">
+          <div className="row min-vh-100 h-100 justify-content-center align-items-center">
             <div className="col-md-9 bg-white p-5 border rounded border-2 form-body">
               <div className="text-center">
                 <img src={logo} alt="" className="w-25" />
@@ -46,13 +46,13 @@ export default function Login({ saveLoginData }) {
                   Welcome Back! Please enter your details
                 </p>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="input-group mb-3">
-                    <span className="input-group-text" id="basic-addon1">
-                      <i className="fa fa-envelope"></i>
-                    </span>
+                  <div className="input-group mb-3" >
+                    <span className="input-group-text " id="basic-addon1">
+                      <i className="fa fa-envelope"></i> 
+                    </span>       
                     <input
-                      type="text"
-                      className="form-control"
+                      type="text"                    
+                      className="form-control border-start border-secondary"
                       placeholder="Enter Your E-mail"
                       {...register("email", {
                         required: "Email is Required",
@@ -69,13 +69,13 @@ export default function Login({ saveLoginData }) {
                       {errors.email.message}
                     </div>
                   )}
-                  <div className="input-group mb-3">
+                  <div className="input-group mb-3 ">
                     <span className="input-group-text " id="basic-addon1">
                       <i className="fa fa-key"></i>
                     </span>
                     <input
                       type={checkShowPassword ? "text" : "password"}
-                      className="form-control"
+                      className="form-control border-start border-secondary"
                       placeholder="Password"
                       {...register("password", {
                         required: "Password is Required",

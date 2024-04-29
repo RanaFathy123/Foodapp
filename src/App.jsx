@@ -16,20 +16,25 @@ import ChangePassword from "./modules/AuthenticationModule/components/changepass
 import { ToastContainer } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 import ProtectedRoute from "./modules/SharedModule/components/ProtectedRoute/ProtectedRoute";
-
+import PrivateRoute from "./modules/SharedModule/components/PrivateRoute/PrivateRoute";
+import axios from "axios";
 
 function App() {
   const [loginData, setLoginData] = useState(null);
+
   let saveLoginData = () => {
     let encodedData = localStorage.getItem("token");
     let decodedDeata = jwtDecode(encodedData);
     setLoginData(decodedDeata);
   };
+
   useEffect(() => {
+  
     if (localStorage.getItem("token")) {
       saveLoginData();
     }
   }, []);
+
   const routes = createBrowserRouter([
     {
       path: "/dashboard",
@@ -42,13 +47,17 @@ function App() {
       children: [
         { index: true, element: <Dashboard /> },
         { path: "reciepes", element: <ReciepesList /> },
-        { path: "categories", element: <CategoriesList /> },
+        { path: "categories", element: <CategoriesList  /> },
         { path: "users", element: <UsersList /> },
       ],
     },
     {
       path: "/",
-      element: <AuthenticationLayout />,
+      element: (
+        <PrivateRoute loginData={loginData}>
+          <AuthenticationLayout />
+        </PrivateRoute>
+      ),
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Login saveLoginData={saveLoginData} /> },
