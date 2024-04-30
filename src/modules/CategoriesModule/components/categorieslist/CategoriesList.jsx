@@ -16,6 +16,7 @@ export default function CategoriesList() {
   const [categoryId, setCategoryId] = useState("");
   const addBtn = useRef();
   const [show, setShow] = useState(false);
+  const [handleEdit, setHandleEdit] = useState(false);
 
   const {
     register,
@@ -28,13 +29,14 @@ export default function CategoriesList() {
     // console.log(categoryBtnData,iconClass);
     if (categoryBtnData.target) {
       setMode("addMode");
+      setHandleEdit(!handleEdit)
       setModalTitle("Add New Category");
       setShow(true);
     } else if (iconClass == "fa-edit") {
       setMode("updateMode");
+      setHandleEdit(!handleEdit)
       setModalTitle("Update Category");
       setCategoryId(categoryBtnData);
- 
       getCategory(categoryId);
       setShow(true);
     } else {
@@ -57,7 +59,7 @@ export default function CategoriesList() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-  
+
       reset({ name: response.data.name });
     } catch (error) {
       console.log(error);
@@ -121,23 +123,21 @@ export default function CategoriesList() {
       console.log(error);
     }
     getCategories();
-    setCategoryId('')
     handleClose();
     toast.error("category Deleted");
   };
 
   const onSubmit = async (data) => {
-    if (!categoryId) {
+    if (!handleEdit) {
       addcategory(data);
       reset({ name: "" });
       getCategories();
       handleClose();
       toast.success("Category Add Successfully");
-    } else  {
+    } else {
       editCategory(data);
       getCategories();
       handleClose();
-      setCategoryId('')
       toast.success("Category Edited Successfully");
     }
   };
