@@ -10,13 +10,11 @@ import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 
 export default function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState([]);
-  const [category, setCategory] = useState({});
   const [modalTitle, setModalTitle] = useState("");
   const [mode, setMode] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const addBtn = useRef();
   const [show, setShow] = useState(false);
-  const [handleEdit, setHandleEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
 
   const {
     register,
@@ -25,32 +23,31 @@ export default function CategoriesList() {
     formState: { errors },
   } = useForm();
 
-  const handleShow = (categoryBtnData, iconClass) => {
-    // console.log(categoryBtnData,iconClass);
-    if (categoryBtnData.target) {
+  const handleShow = (data) => {
+    if (data.target) {
+      reset({ name: "" });
+      setShow(true);
       setMode("addMode");
-      setHandleEdit(!handleEdit)
       setModalTitle("Add New Category");
-      setShow(true);
-    } else if (iconClass == "fa-edit") {
-      setMode("updateMode");
-      setHandleEdit(!handleEdit)
-      setModalTitle("Update Category");
-      setCategoryId(categoryBtnData);
-      getCategory(categoryId);
-      setShow(true);
     } else {
-      setMode("deleteMode");
-      setModalTitle("");
-      setCategoryId(categoryBtnData);
+      console.log(categoryId);
       setShow(true);
+      setMode("updateMode");
+      setModalTitle("Update Category");
+      setCategoryId(data);
+      getCategory(categoryId);
     }
   };
   const handleClose = () => {
-    reset({ name: "" });
     setShow(false);
   };
-
+  const handleShowDelete = (id) => {
+    setShowDelete(true);
+    setCategoryId(id);
+  };
+  const handleCloseDelete = () => {
+    setShowDelete(false);
+  };
   const getCategory = async (id) => {
     try {
       const response = await axios.get(
@@ -59,8 +56,10 @@ export default function CategoriesList() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-
-      reset({ name: response.data.name });
+      console.log(response.data);
+      if (response.data) {
+        reset({ name: response?.data.name });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -78,34 +77,43 @@ export default function CategoriesList() {
       console.log(error);
     }
   };
-  const addcategory = async (data) => {
-    try {
-      const response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Category/",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const editCategory = async (data) => {
-    try {
-      const response = await axios.put(
-        `https://upskilling-egypt.com:3006/api/v1/Category/${categoryId}`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.log(error);
+
+  const onSubmit = async (data) => {
+    if (mode == "addMode") {
+      try {
+        const response = await axios.post(
+          "https://upskilling-egypt.com:3006/api/v1/Category/",
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+      getCategories();
+      reset({ name: "" });
+      handleClose();
+      toast.success("Category Add Successfully");
+    } else {
+      try {
+        const response = await axios.put(
+          `https://upskilling-egypt.com:3006/api/v1/Category/${categoryId}`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+      getCategories();
+      handleClose();
+      toast.success("Category Edited Successfully");
     }
   };
 
@@ -123,72 +131,56 @@ export default function CategoriesList() {
       console.log(error);
     }
     getCategories();
-    handleClose();
+    handleCloseDelete();
     toast.error("category Deleted");
-  };
-
-  const onSubmit = async (data) => {
-    if (!handleEdit) {
-      addcategory(data);
-      reset({ name: "" });
-      getCategories();
-      handleClose();
-      toast.success("Category Add Successfully");
-    } else {
-      editCategory(data);
-      getCategories();
-      handleClose();
-      toast.success("Category Edited Successfully");
-    }
   };
   useEffect(() => {
     getCategories();
-  }, []);
+  }, [categoryId, mode]);
   useEffect(() => {
-    if (mode == "updateMode") {
+    if (mode != "addMode") {
       getCategory(categoryId);
     }
   }, [categoryId, mode]);
 
   return (
     <>
+      <Modal show={showDelete} onHide={handleCloseDelete}>
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          <DeleteData title={"Category"} />
+          <button
+            onClick={deleteCategory}
+            className="btn btn-danger ms-auto d-block "
+          >
+            Delete
+          </button>
+        </Modal.Body>
+      </Modal>
+
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <h3>{modalTitle}</h3>
         </Modal.Header>
         <Modal.Body>
-          {mode != "deleteMode" ? (
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="d-flex flex-column ">
-                <input
-                  type="text"
-                  className="form-control mt-5 mb-4"
-                  placeholder={
-                    mode == "addMode" ? "Enter Category" : "Loading.."
-                  }
-                  {...register("name", {
-                    required: "Name is Required",
-                  })}
-                />
-                {errors.name && (
-                  <div className="text-danger m-4">{errors.name.message}</div>
-                )}
-              </div>
-              <button className="btn btn-success ms-auto d-block ">
-                Save Changes
-              </button>
-            </form>
-          ) : (
-            <>
-              <DeleteData title={"Category"} />
-              <button
-                onClick={deleteCategory}
-                className="btn btn-danger ms-auto d-block "
-              >
-                Delete
-              </button>
-            </>
-          )}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="d-flex flex-column ">
+              <input
+                type="text"
+                className="form-control mt-5 mb-4"
+                placeholder={mode == "addMode" ? "Enter Category" : "Loading.."}
+                {...register("name", {
+                  required: "Name is Required",
+                })}
+              />
+              {errors.name && (
+                <div className="text-danger m-4">{errors.name.message}</div>
+              )}
+            </div>
+            <button className="btn btn-success ms-auto d-block ">
+              Save Changes
+            </button>
+          </form>
         </Modal.Body>
       </Modal>
       <Header
@@ -205,11 +197,7 @@ export default function CategoriesList() {
             <p>You can check all details</p>
           </div>
           <div>
-            <button
-              ref={addBtn}
-              className="btn btn-success"
-              onClick={handleShow}
-            >
+            <button className="btn btn-success" onClick={(e) => handleShow(e)}>
               Add New Category
             </button>
           </div>
@@ -251,15 +239,11 @@ export default function CategoriesList() {
                       <i className="fa fa-eye text-primary "></i>
                       <i
                         className="fa fa-edit text-warning"
-                        onClick={(e) =>
-                          handleShow(category.id, e.target.classList[1])
-                        }
+                        onClick={() => handleShow(category.id)}
                       ></i>
                       <i
                         className="fa fa-trash text-danger "
-                        onClick={(e) =>
-                          handleShow(category.id, e.target.classList[1])
-                        }
+                        onClick={() => handleShowDelete(category.id)}
                       ></i>
                     </div>
                   </td>
