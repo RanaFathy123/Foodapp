@@ -14,7 +14,6 @@ export default function CategoriesList() {
   const [mode, setMode] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [show, setShow] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
 
   const {
     register,
@@ -46,9 +45,6 @@ export default function CategoriesList() {
     setShow(false);
   };
 
-  const handleCloseDelete = () => {
-    setShowDelete(false);
-  };
   const getCategory = async (id) => {
     try {
       const response = await axios.get(
@@ -57,7 +53,7 @@ export default function CategoriesList() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      console.log(response.data);
+     
       if (response.data) {
         reset({ name: response?.data.name });
       }
@@ -78,7 +74,6 @@ export default function CategoriesList() {
       console.log(error);
     }
   };
-
   const onSubmit = async (data) => {
     if (mode == "addMode") {
       try {
