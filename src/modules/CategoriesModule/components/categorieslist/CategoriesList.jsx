@@ -57,7 +57,7 @@ export default function CategoriesList() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      setCategory(response.data);
+  
       reset({ name: response.data.name });
     } catch (error) {
       console.log(error);
@@ -121,21 +121,23 @@ export default function CategoriesList() {
       console.log(error);
     }
     getCategories();
+    setCategoryId('')
     handleClose();
     toast.error("category Deleted");
   };
 
   const onSubmit = async (data) => {
-    if (mode == "addMode") {
+    if (!categoryId) {
       addcategory(data);
       reset({ name: "" });
       getCategories();
       handleClose();
       toast.success("Category Add Successfully");
-    } else if (mode == "updateMode") {
+    } else  {
       editCategory(data);
       getCategories();
       handleClose();
+      setCategoryId('')
       toast.success("Category Edited Successfully");
     }
   };
