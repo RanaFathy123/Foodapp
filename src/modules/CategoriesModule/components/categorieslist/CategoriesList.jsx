@@ -23,28 +23,29 @@ export default function CategoriesList() {
     formState: { errors },
   } = useForm();
 
-  const handleShow = (data) => {
+  const handleShow = (data, iconClass) => {
     if (data.target) {
       reset({ name: "" });
       setShow(true);
       setMode("addMode");
       setModalTitle("Add New Category");
-    } else {
-      console.log(categoryId);
+    } else if (iconClass == "fa-edit") {
       setShow(true);
       setMode("updateMode");
       setModalTitle("Update Category");
       setCategoryId(data);
       getCategory(categoryId);
+    } else {
+      setShow(true);
+      setMode("deleteMode");
+      setModalTitle("");
+      setCategoryId(data);
     }
   };
   const handleClose = () => {
     setShow(false);
   };
-  const handleShowDelete = (id) => {
-    setShowDelete(true);
-    setCategoryId(id);
-  };
+
   const handleCloseDelete = () => {
     setShowDelete(false);
   };
@@ -131,12 +132,12 @@ export default function CategoriesList() {
       console.log(error);
     }
     getCategories();
-    handleCloseDelete();
+    handleClose();
     toast.error("category Deleted");
   };
   useEffect(() => {
     getCategories();
-  }, [categoryId, mode]);
+  }, []);
   useEffect(() => {
     if (mode != "addMode") {
       getCategory(categoryId);
@@ -145,42 +146,43 @@ export default function CategoriesList() {
 
   return (
     <>
-      <Modal show={showDelete} onHide={handleCloseDelete}>
-        <Modal.Header closeButton></Modal.Header>
-        <Modal.Body>
-          <DeleteData title={"Category"} />
-          <button
-            onClick={deleteCategory}
-            className="btn btn-danger ms-auto d-block "
-          >
-            Delete
-          </button>
-        </Modal.Body>
-      </Modal>
-
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <h3>{modalTitle}</h3>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="d-flex flex-column ">
-              <input
-                type="text"
-                className="form-control mt-5 mb-4"
-                placeholder={mode == "addMode" ? "Enter Category" : "Loading.."}
-                {...register("name", {
-                  required: "Name is Required",
-                })}
-              />
-              {errors.name && (
-                <div className="text-danger m-4">{errors.name.message}</div>
-              )}
-            </div>
-            <button className="btn btn-success ms-auto d-block ">
-              Save Changes
-            </button>
-          </form>
+          {mode != "deleteMode" ? (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="d-flex flex-column ">
+                <input
+                  type="text"
+                  className="form-control mt-5 mb-4"
+                  placeholder={
+                    mode == "addMode" ? "Enter Category" : "Loading.."
+                  }
+                  {...register("name", {
+                    required: "Name is Required",
+                  })}
+                />
+                {errors.name && (
+                  <div className="text-danger m-4">{errors.name.message}</div>
+                )}
+              </div>
+              <button className="btn btn-success ms-auto d-block ">
+                Save Changes
+              </button>
+            </form>
+          ) : (
+            <>
+              <DeleteData title={"Category"} />
+              <button
+                onClick={deleteCategory}
+                className="btn btn-danger ms-auto d-block "
+              >
+                Delete
+              </button>
+            </>
+          )}
         </Modal.Body>
       </Modal>
       <Header
@@ -239,11 +241,15 @@ export default function CategoriesList() {
                       <i className="fa fa-eye text-primary "></i>
                       <i
                         className="fa fa-edit text-warning"
-                        onClick={() => handleShow(category.id)}
+                        onClick={(e) =>
+                          handleShow(category.id, e.target.classList[1])
+                        }
                       ></i>
                       <i
                         className="fa fa-trash text-danger "
-                        onClick={() => handleShowDelete(category.id)}
+                        onClick={(e) =>
+                          handleShow(category.id, e.target.classList[1])
+                        }
                       ></i>
                     </div>
                   </td>
