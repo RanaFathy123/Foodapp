@@ -29,11 +29,12 @@ export default function CategoriesList() {
       setMode("addMode");
       setModalTitle("Add New Category");
     } else if (iconClass == "fa-edit") {
+      reset({ name: "" });
       setShow(true);
       setMode("updateMode");
       setModalTitle("Update Category");
+      getCategory(data);
       setCategoryId(data);
-      getCategory(categoryId);
     } else {
       setShow(true);
       setMode("deleteMode");
@@ -53,10 +54,8 @@ export default function CategoriesList() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-     
-      if (response.data) {
-        reset({ name: response.data.name });
-      }
+
+      reset({ name: response.data?.name });
     } catch (error) {
       console.log(error);
     }
@@ -108,7 +107,7 @@ export default function CategoriesList() {
         console.log(error);
       }
       getCategories();
-      reset({name:''})
+      reset({ name: "" });
       handleClose();
       toast.success("Category Edited Successfully");
     }
