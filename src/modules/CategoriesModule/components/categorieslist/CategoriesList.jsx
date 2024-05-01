@@ -11,7 +11,6 @@ import NoData from "../../../SharedModule/components/NoData/NoData";
 export default function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
-
   const [mode, setMode] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [show, setShow] = useState(false);
@@ -24,6 +23,7 @@ export default function CategoriesList() {
   } = useForm();
 
   const handleShow = (data, iconClass) => {
+    console.log(data, iconClass);
     if (data.target) {
       reset({ name: "" });
       setShow(true);
@@ -72,6 +72,7 @@ export default function CategoriesList() {
             },
           }
         );
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -90,6 +91,7 @@ export default function CategoriesList() {
             },
           }
         );
+        console.log(response);
       } catch (error) {
         console.log(error);
       }
@@ -109,11 +111,13 @@ export default function CategoriesList() {
           },
         }
       );
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
     getCategories();
     handleClose();
+
     toast.error("category Deleted");
   };
   useEffect(() => {

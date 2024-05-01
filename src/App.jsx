@@ -18,6 +18,8 @@ import { jwtDecode } from "jwt-decode";
 import ProtectedRoute from "./modules/SharedModule/components/ProtectedRoute/ProtectedRoute";
 import PrivateRoute from "./modules/SharedModule/components/PrivateRoute/PrivateRoute";
 import axios from "axios";
+import ReciepeData from "./modules/ReciepesModule/components/reciepedata/ReciepeData";
+import EditRecipeData from "./modules/ReciepesModule/components/editreciepedata/EditRecipeData";
 
 function App() {
   const [loginData, setLoginData] = useState(null);
@@ -45,6 +47,8 @@ function App() {
       children: [
         { index: true, element: <Dashboard /> },
         { path: "reciepes", element: <ReciepesList /> },
+        { path: "reciepedata", element: <ReciepeData /> },
+        { path: "editreciepe/:recipeId", element: <EditRecipeData /> },
         { path: "categories", element: <CategoriesList  /> },
         { path: "users", element: <UsersList /> },
         {

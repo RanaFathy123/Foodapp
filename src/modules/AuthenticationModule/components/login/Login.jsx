@@ -105,7 +105,13 @@ export default function Login({ saveLoginData }) {
                     </div>
                   )}
                   <div className="links d-flex justify-content-between my-4">
-                    <a>Register Now?</a>
+                  <Link
+                      to="/register"
+                      className="text-success text-decoration-none "
+                    >
+                     Register Now?
+                    </Link>
+                    
                     <Link
                       to="/forgetpass"
                       className="text-success text-decoration-none "

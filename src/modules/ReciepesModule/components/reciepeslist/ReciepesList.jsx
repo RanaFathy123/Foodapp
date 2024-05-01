@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from "react";
-import Header from "../../../SharedModule/components/Header/Header";
-import reciepeHeaderImg from "../../../../assets/images/header.png";
 import axios from "axios";
-import NoData from "../../../SharedModule/components/NoData/NoData";
-import noDataImg from "../../../../assets/images/no-data.png";
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import reciepeHeaderImg from "../../../../assets/images/header.png";
+import noDataImg from "../../../../assets/images/no-data.png";
+import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
+import Header from "../../../SharedModule/components/Header/Header";
+import NoData from "../../../SharedModule/components/NoData/NoData";
 
 export default function ReciepesList() {
   const [reciepesList, setReciepesList] = useState([]);
   const [showDelete, setShowDelete] = useState(false);
   const [recipeId, setReciepeId] = useState("");
+  const navigate = useNavigate();
+
+  const goToReciepeData = () => {
+    navigate("/dashboard/reciepedata");
+  };
 
   const handleShowDelete = (id) => {
     setShowDelete(true);
@@ -84,7 +90,9 @@ export default function ReciepesList() {
             <p>You can check all details</p>
           </div>
           <div>
-            <button className="btn btn-success">Add New Item</button>
+            <button className="btn btn-success" onClick={goToReciepeData}>
+              Add New Item
+            </button>
           </div>
         </div>
       </div>
@@ -150,7 +158,10 @@ export default function ReciepesList() {
                   <td>
                     <div className="d-flex gap-3 align-items-center ">
                       <i className="fa fa-eye text-primary "></i>
-                      <i className="fa fa-edit text-warning"></i>
+                      <Link to={`/dashboard/editreciepe/${reciepe.id}`}>
+                        <i className="fa fa-edit text-warning"></i>
+                      </Link>
+
                       <i
                         className="fa fa-trash text-danger"
                         onClick={() => handleShowDelete(reciepe.id)}
