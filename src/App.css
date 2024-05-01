@@ -23,8 +23,9 @@
 
 .notfound-bg {
   background-image: url(./assets/images/not-found-bg.png);
+  background-size: contain;
+  background-position: center right;
   background-repeat: no-repeat;
-  background-size: 100% 100%;
 }
 
 .sidebar-container .ps-sidebar-container {
@@ -63,11 +64,10 @@
   .fa-solid.fa-bars {
     display: block;
   }
- 
 }
-.btn-close{
- background-image: url(./assets/images/closebtn.png) !important;
+.btn-close {
+  background-image: url(./assets/images/closebtn.png) !important;
 }
-.modal-header{
+.modal-header {
   border: none !important;
 }

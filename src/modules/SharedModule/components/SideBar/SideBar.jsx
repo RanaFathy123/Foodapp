@@ -17,7 +17,7 @@ export default function SideBar({ setLoginData }) {
   };
 
   return (
-    <div className="sidebar-container h-100 min-vh-100 ">
+    <div className="sidebar-container p-0 h-100 min-vh-100 ">
       <Sidebar
         collapsed={isCollapsed}
         breakPoint="lg"
@@ -28,7 +28,7 @@ export default function SideBar({ setLoginData }) {
       >
         <Menu>
           <MenuItem
-            className="px-2 mt-3 toggle-img "
+            className=" mt-3 toggle-img "
             onClick={toggle}
             width="100"
             icon={

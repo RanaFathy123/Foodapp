@@ -1,16 +1,17 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { useForm } from "react-hook-form";
-import categoriesHeaderImg from "../../../../assets/images/header.png";
-import NoData from "../../../SharedModule/components/NoData/NoData";
-import Header from "../../../SharedModule/components/Header/Header";
 import { toast } from "react-toastify";
+import categoriesHeaderImg from "../../../../assets/images/header.png";
 import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
+import Header from "../../../SharedModule/components/Header/Header";
+import NoData from "../../../SharedModule/components/NoData/NoData";
 
 export default function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
+
   const [mode, setMode] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [show, setShow] = useState(false);
@@ -33,8 +34,8 @@ export default function CategoriesList() {
       setShow(true);
       setMode("updateMode");
       setModalTitle("Update Category");
-      getCategory(data);
-      setCategoryId(data);
+      reset({ name: data.name });
+      setCategoryId(data.id);
     } else {
       setShow(true);
       setMode("deleteMode");
@@ -46,20 +47,6 @@ export default function CategoriesList() {
     setShow(false);
   };
 
-  const getCategory = async (id) => {
-    try {
-      const response = await axios.get(
-        `https://upskilling-egypt.com:3006/api/v1/Category/${id}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-
-      reset({ name: response.data?.name });
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const getCategories = async () => {
     try {
       const response = await axios.get(
@@ -107,7 +94,6 @@ export default function CategoriesList() {
         console.log(error);
       }
       getCategories();
-      reset({ name: "" });
       handleClose();
       toast.success("Category Edited Successfully");
     }
@@ -133,11 +119,6 @@ export default function CategoriesList() {
   useEffect(() => {
     getCategories();
   }, []);
-  useEffect(() => {
-    if (mode != "addMode") {
-      getCategory(categoryId);
-    }
-  }, [categoryId, mode]);
 
   return (
     <>
@@ -237,7 +218,7 @@ export default function CategoriesList() {
                       <i
                         className="fa fa-edit text-warning"
                         onClick={(e) =>
-                          handleShow(category.id, e.target.classList[1])
+                          handleShow(category, e.target.classList[1])
                         }
                       ></i>
                       <i

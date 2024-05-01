@@ -21,7 +21,6 @@ import axios from "axios";
 
 function App() {
   const [loginData, setLoginData] = useState(null);
-
   let saveLoginData = () => {
     let encodedData = localStorage.getItem("token");
     let decodedDeata = jwtDecode(encodedData);
@@ -29,7 +28,6 @@ function App() {
   };
 
   useEffect(() => {
-  
     if (localStorage.getItem("token")) {
       saveLoginData();
     }
@@ -49,6 +47,10 @@ function App() {
         { path: "reciepes", element: <ReciepesList /> },
         { path: "categories", element: <CategoriesList  /> },
         { path: "users", element: <UsersList /> },
+        {
+          path: "*",
+          element: <NotFound />,
+        },
       ],
     },
     {

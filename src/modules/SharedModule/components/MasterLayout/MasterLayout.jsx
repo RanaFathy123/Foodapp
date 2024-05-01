@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 
 export default function MasterLayout({setLoginData,loginData}) {
   return (
-    <div className="container-fluid">
+    <div className="container-fluid p-0">
       <div className="d-flex">
         <div >
           <SideBar setLoginData={setLoginData} />
