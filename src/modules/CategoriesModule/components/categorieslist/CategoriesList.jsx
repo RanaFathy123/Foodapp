@@ -55,7 +55,7 @@ export default function CategoriesList() {
       );
      
       if (response.data) {
-        reset({ name: response?.data.name });
+        reset({ name: response.data.name });
       }
     } catch (error) {
       console.log(error);
@@ -108,6 +108,7 @@ export default function CategoriesList() {
         console.log(error);
       }
       getCategories();
+      reset({name:''})
       handleClose();
       toast.success("Category Edited Successfully");
     }
