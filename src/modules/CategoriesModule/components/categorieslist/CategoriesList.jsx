@@ -18,7 +18,7 @@ export default function CategoriesList() {
   const [show, setShow] = useState(false);
   const [pageNumbers, setPageNumbers] = useState([]);
   const [categoryName, setCategoryName] = useState("");
-  const [disableInput,setDisableInput]=useState(false)
+  const [disableInput, setDisableInput] = useState(false);
 
   const {
     register,
@@ -34,28 +34,28 @@ export default function CategoriesList() {
       setShow(true);
       setMode("addMode");
       setModalTitle("Add New Category");
-      setDisableInput(false)  
+      setDisableInput(false);
     } else if (iconClass == "fa-edit") {
       reset({ name: "" });
       setShow(true);
       setMode("updateMode");
       setModalTitle("Update Category");
       reset({ name: data.name });
-      setDisableInput(false)  
+      setDisableInput(false);
       setCategoryId(data.id);
-    }else if(iconClass == "fa-eye"){
+    } else if (iconClass == "fa-eye") {
       reset({ name: "" });
-      setShow(true)
-      setMode('ShowMode')
+      setShow(true);
+      setMode("ShowMode");
       setModalTitle("Category Details");
       reset({ name: data.name });
-      setDisableInput(true)  
+      setDisableInput(true);
     } else {
       setShow(true);
       setMode("deleteMode");
       setModalTitle("");
       setCategoryId(data);
-      setDisableInput(false)  
+      setDisableInput(false);
     }
   };
   const handleClose = () => {
@@ -176,9 +176,11 @@ export default function CategoriesList() {
                   <div className="text-danger m-4">{errors.name.message}</div>
                 )}
               </div>
-              <button className="btn btn-success ms-auto d-block ">
-                Save Changes
-              </button>
+              {mode != "ShowMode" && (
+                <button className="btn btn-success ms-auto d-block ">
+                  Save Changes
+                </button>
+              )}
             </form>
           ) : (
             <>
@@ -264,9 +266,12 @@ export default function CategoriesList() {
                   </td>
                   <td>
                     <div className="d-flex gap-3 align-items-center ">
-                      <i className="fa fa-eye text-primary" onClick={(e) =>
+                      <i
+                        className="fa fa-eye text-primary"
+                        onClick={(e) =>
                           handleShow(category, e.target.classList[1])
-                        }></i>
+                        }
+                      ></i>
                       <i
                         className="fa fa-edit text-warning"
                         onClick={(e) =>
@@ -297,7 +302,11 @@ export default function CategoriesList() {
               </a>
             </li>
             {pageNumbers.map((pageNo, index) => (
-              <li className="page-item" key={index} onClick={()=>getCategories(categoryName,20,pageNo)}>
+              <li
+                className="page-item"
+                key={index}
+                onClick={() => getCategories(categoryName, 20, pageNo)}
+              >
                 <a className="page-link">{pageNo}</a>
               </li>
             ))}
