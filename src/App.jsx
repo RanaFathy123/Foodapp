@@ -71,7 +71,6 @@ function App() {
         { path: "login", element: <Login saveLoginData={saveLoginData} /> },
         { path: "register", element: <Register /> },
         { path: "verifyaccount", element: <VerfiyAccount /> },
-
         { path: "forgetpass", element: <ForgetPassword /> },
         { path: "resetpass", element: <ResetPassword /> },
         { path: "changepass", element: <ChangePassword /> },

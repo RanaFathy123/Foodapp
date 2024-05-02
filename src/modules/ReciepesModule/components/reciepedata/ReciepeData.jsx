@@ -5,13 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ReciepeListHeader } from "../../../SharedModule/components/ReciepeListHeader/ReciepeListHeader";
 
-
-
 export default function ReciepeData() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [tagsList, setTagsList] = useState([]);
-
-
+  const [fileInputContent, setFileInputContent] = useState(
+    "Drag & Drop or Choose a Item Image to Upload"
+  );
+  const handleInputContent = () => {
+    setFileInputContent("File Uploaded Successfully");
+  };
   const navigate = useNavigate();
 
   const {
@@ -19,7 +21,6 @@ export default function ReciepeData() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
 
   const appendToFormData = (data) => {
     const formData = new FormData();
@@ -32,9 +33,7 @@ export default function ReciepeData() {
     return formData;
   };
   const onSubmit = async (data) => {
-    console.log(data);
     let recipeFormData = appendToFormData(data);
-
     try {
       const response = await axios.post(
         "https://upskilling-egypt.com:3006/api/v1/Recipe",
@@ -168,8 +167,8 @@ export default function ReciepeData() {
             <label htmlFor="uploadFile" className="file-lable">
               <div className="d-flex w-100 flex-column  justify-content-center  align-items-center ">
                 <i className="fa fa-upload "></i>
-                <div className="m-2 fw-bold">Drag & Drop or <span className="text-success">Choose a Item Image </span>to Upload</div>
-              </div>   
+                <div className="m-2 fw-bold">{fileInputContent}</div>
+              </div>
               <input
                 type="file"
                 accept=".jpg,.png"
@@ -177,15 +176,17 @@ export default function ReciepeData() {
                 {...register("recipeImage", {
                   required: "recipeImage is Required",
                 })}
+                onChange={handleInputContent}
               />
             </label>
           </div>
           {errors.recipeImage && (
             <div className="text-danger mt-2">{errors.recipeImage.message}</div>
           )}
-
-          <button className="btn btn-danger text-left m-3">Cancel</button>
-          <button className="btn btn-success text-left">Save</button>
+          <div className="text-end">
+            <button className="btn btn-danger text-left m-3">Cancel</button>
+            <button className="btn btn-success text-left">Save</button>
+          </div>
         </form>
       </div>
     </>

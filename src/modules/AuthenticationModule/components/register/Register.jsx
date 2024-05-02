@@ -44,7 +44,7 @@ export default function Register() {
       );
       console.log(response);
       toast.success(response.data.message);
-      navigate("/login");
+      navigate("/verifyaccount");
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);

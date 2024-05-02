@@ -8,6 +8,7 @@ import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 import Header from "../../../SharedModule/components/Header/Header";
 import NoData from "../../../SharedModule/components/NoData/NoData";
 import { format } from "date-fns";
+import { tr } from "date-fns/locale";
 
 export default function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState([]);
@@ -15,8 +16,10 @@ export default function CategoriesList() {
   const [mode, setMode] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [show, setShow] = useState(false);
-  let date = new Date();
-  console.log(new Intl.DateTimeFormat("ban", "id").format(date));
+  const [pageNumbers, setPageNumbers] = useState([]);
+  const [categoryName, setCategoryName] = useState("");
+  const [disableInput,setDisableInput]=useState(false)
+
   const {
     register,
     handleSubmit,
@@ -31,36 +34,58 @@ export default function CategoriesList() {
       setShow(true);
       setMode("addMode");
       setModalTitle("Add New Category");
+      setDisableInput(false)  
     } else if (iconClass == "fa-edit") {
       reset({ name: "" });
       setShow(true);
       setMode("updateMode");
       setModalTitle("Update Category");
       reset({ name: data.name });
+      setDisableInput(false)  
       setCategoryId(data.id);
+    }else if(iconClass == "fa-eye"){
+      reset({ name: "" });
+      setShow(true)
+      setMode('ShowMode')
+      setModalTitle("Category Details");
+      reset({ name: data.name });
+      setDisableInput(true)  
     } else {
       setShow(true);
       setMode("deleteMode");
       setModalTitle("");
       setCategoryId(data);
+      setDisableInput(false)  
     }
   };
   const handleClose = () => {
     setShow(false);
   };
 
-  const getCategories = async () => {
+  const getCategories = async (name, pageSize = 20, pageNumber) => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1",
+        `https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=${pageSize}&pageNumber=${pageNumber}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          params: {
+            name: name,
+          },
         }
+      );
+      setPageNumbers(
+        Array(response.data.totalNumberOfPages)
+          .fill()
+          .map((_, i) => i + 1)
       );
       setCategoriesList(response.data.data);
     } catch (error) {
       console.log(error);
     }
+  };
+  const getCategoryValue = (input) => {
+    setCategoryName(input.target.value);
+    getCategories(input.target.value, 20, 1);
   };
   const onSubmit = async (data) => {
     if (mode == "addMode") {
@@ -123,7 +148,7 @@ export default function CategoriesList() {
     toast.error("category Deleted");
   };
   useEffect(() => {
-    getCategories();
+    getCategories("", "20", "1");
   }, []);
 
   return (
@@ -138,7 +163,8 @@ export default function CategoriesList() {
               <div className="d-flex flex-column ">
                 <input
                   type="text"
-                  className="form-control mt-5 mb-4"
+                  className="form-control mt-5 mb-4 "
+                  disabled={disableInput}
                   placeholder={
                     mode == "addMode" ? "Enter Category" : "Loading.."
                   }
@@ -187,9 +213,21 @@ export default function CategoriesList() {
           </div>
         </div>
       </div>
+      <div className="container my-3">
+        <div className="row">
+          <div className="col-md-12">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search By Category"
+              onChange={getCategoryValue}
+            />
+          </div>
+        </div>
+      </div>
       <div className="table-responsive  px-3 border-none ">
-        <table className="table align-middle mb-0 rounded p-5 w-100 table-borderless">
-          <thead className="bg-primary text-white bg-info h-100 table-secondary  p-5">
+        <table className="table align-middle mb-0 rounded py-5 w-100 table-borderless">
+          <thead className="bg-primary text-white bg-info h-100 table-secondary   py-5">
             <tr>
               <th className="p-4 ">Name</th>
               <th className="py-4"></th>
@@ -226,7 +264,9 @@ export default function CategoriesList() {
                   </td>
                   <td>
                     <div className="d-flex gap-3 align-items-center ">
-                      <i className="fa fa-eye text-primary "></i>
+                      <i className="fa fa-eye text-primary" onClick={(e) =>
+                          handleShow(category, e.target.classList[1])
+                        }></i>
                       <i
                         className="fa fa-edit text-warning"
                         onClick={(e) =>
@@ -246,6 +286,28 @@ export default function CategoriesList() {
           </tbody>
         </table>
         {categoriesList.length == 0 && <NoData />}
+        <nav
+          aria-label="Page navigation example "
+          style={{ display: "flex", justifyContent: "end" }}
+        >
+          <ul className="pagination">
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+              </a>
+            </li>
+            {pageNumbers.map((pageNo, index) => (
+              <li className="page-item" key={index} onClick={()=>getCategories(categoryName,20,pageNo)}>
+                <a className="page-link">{pageNo}</a>
+              </li>
+            ))}
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">»</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </>
   );

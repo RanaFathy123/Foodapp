@@ -13,6 +13,13 @@ export default function ReciepesList() {
   const [reciepesList, setReciepesList] = useState([]);
   const [showDelete, setShowDelete] = useState(false);
   const [recipeId, setReciepeId] = useState("");
+  const [reciepeName, setReciepeName] = useState("");
+  const [reciepeTag, setReciepeTag] = useState("");
+  const [reciepeCategory, setReciepeCategory] = useState("");
+  const [categoriesList, setCategoriesList] = useState([]);
+  const [tagsList, setTagsList] = useState([]);
+  const [pageNumbers, setPageNumbers] = useState([]);
+
   const navigate = useNavigate();
 
   const goToReciepeData = () => {
@@ -26,16 +33,54 @@ export default function ReciepesList() {
   const handleCloseDelete = () => {
     setShowDelete(false);
   };
-
-  const getReciepes = async () => {
+  const getTags = async () => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:3006/api/v1/Recipe/?pageSize=10&pageNumber=1",
+        "https://upskilling-egypt.com:3006/api/v1/tag",
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      console.log(response.data.data);
+
+      setTagsList(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const response = await axios.get(
+        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1",
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      setCategoriesList(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getReciepes = async (name, tagId, categoryId, pageSize, pageNumber) => {
+    try {
+      const response = await axios.get(
+        `https://upskilling-egypt.com:3006/api/v1/Recipe/?pageSize=5&pageNumber=${pageNumber}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          params: {
+            name: name,
+            tagId: tagId,
+            categoryId: categoryId,
+          },
+        }
+      );
+      console.log(response.data.totalNumberOfPages);
+      setPageNumbers(
+        Array(response.data.totalNumberOfPages)
+          .fill()
+          .map((_, i) => i + 1)
+      );
       setReciepesList(response.data.data);
     } catch (error) {
       console.log(error);
@@ -58,8 +103,22 @@ export default function ReciepesList() {
     handleCloseDelete();
     toast.error("recipe Deleted");
   };
+  const getReciepeValue = (input) => {
+    setReciepeName(input.target.value);
+    getReciepes(input.target.value, reciepeTag, reciepeCategory, 5, 1);
+  };
+  const getReciepeTagValue = (select) => {
+    setReciepeTag(select.target.value);
+    getReciepes(reciepeName, select.target.value, reciepeCategory, 5, 1);
+  };
+  const getReciepeCategoryValue = (select) => {
+    setReciepeCategory(select.target.value);
+    getReciepes(reciepeName, reciepeTag, select.target.value, 5, 1);
+  };
   useEffect(() => {
-    getReciepes();
+    getReciepes("", "", "", 5, 1);
+    getTags();
+    getCategories();
   }, []);
   return (
     <>
@@ -90,9 +149,51 @@ export default function ReciepesList() {
             <p>You can check all details</p>
           </div>
           <div>
-            <button className="btn btn-success" onClick={goToReciepeData}>
+            <button className="btn btn-success px-5" onClick={goToReciepeData}>
               Add New Item
             </button>
+          </div>
+        </div>
+      </div>
+      <div className="container my-3">
+        <div className="row">
+          <div className="col-md-6">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search By Name"
+              onChange={getReciepeValue}
+            />
+          </div>
+          <div className="col-md-3">
+            <select
+              name=""
+              id=""
+              className="form-select"
+              onChange={getReciepeCategoryValue}
+            >
+              <option value="">Category</option>
+              {categoriesList.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="col-md-3">
+            <select
+              name=""
+              id=""
+              className="form-select"
+              onChange={getReciepeTagValue}
+            >
+              <option value="">Tag</option>
+              {tagsList.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
@@ -173,6 +274,40 @@ export default function ReciepesList() {
           </tbody>
         </table>
         {reciepesList.length == 0 && <NoData />}
+        <nav
+          aria-label="Page navigation example "
+          style={{ display: "flex", justifyContent: "end" }}
+        >
+          <ul className="pagination">
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+              </a>
+            </li>
+            {pageNumbers.map((pageNo, index) => (
+              <li
+                className="page-item"
+                key={index}
+                onClick={() =>
+                  getReciepes(
+                    reciepeName,
+                    reciepeTag,
+                    reciepeCategory,
+                    5,
+                    pageNo
+                  )
+                }
+              >
+                <a className="page-link">{pageNo}</a>
+              </li>
+            ))}
+            <li className="page-item">
+              <a className="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">»</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </>
   );

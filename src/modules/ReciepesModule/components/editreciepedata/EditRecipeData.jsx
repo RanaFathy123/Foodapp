@@ -1,21 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { ReciepeListHeader } from "../../../SharedModule/components/ReciepeListHeader/ReciepeListHeader";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function EditRecipeData() {
   const [recipe, setReciepe] = useState({});
   const [categoriesList, setCategoriesList] = useState([]);
   const [tagsList, setTagsList] = useState([]);
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
+    reset,
+
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: recipe ? recipe?.name : "",
+    },
+  });
 
   const { recipeId } = useParams();
-  console.log(recipeId);
 
   const getReciepe = async () => {
     try {
@@ -25,14 +33,20 @@ export default function EditRecipeData() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      console.log(response.data);
+
       setReciepe(response.data);
+      reset({
+        name: response.data.name,
+        price: response.data.price,
+        description: response.data.description,
+        tag: response.data.tag.name,
+        category: response.data.category[0].name,
+      });
     } catch (err) {
       console.log(err);
     }
   };
   const appendToFormData = (data) => {
-    console.log(data);
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("description", data.description);
@@ -101,17 +115,16 @@ export default function EditRecipeData() {
           <div className="input-group mb-3">
             <input
               type="text"
-              defaultValue={recipe ? recipe?.name : ""}
               className="form-control "
-              /*      placeholder="Recipe Name"
+              placeholder="Recipe Name"
               {...register("name", {
                 required: "name  is Required",
-              })} */
+              })}
             />
           </div>
-          {/*   {errors.name && (
+          {errors.name && (
             <div className="text-danger m-4">{errors.name.message}</div>
-          )} */}
+          )}
           <div className="input-group mb-3">
             <select
               className="form-select"
@@ -120,29 +133,27 @@ export default function EditRecipeData() {
                 required: "tag is Required",
               })}
             >
+              <option defaultValue value={recipe?.tag?.id}>
+                {" "}
+                {recipe?.tag?.name}
+              </option>
+
               {tagsList.map((tag) => (
-                <option
-                  defaultValue={recipe ? recipe.tag?.name : ""}
-                  key={tag.id}
-                  value={tag.id}
-                >
+                <option key={tag.id} value={tag.id}>
                   {tag.name}
                 </option>
               ))}
             </select>
           </div>
-          {/*     {errors.tagId && (
-            <div className="text-danger m-4">{errors.tagId.message}</div>
-          )} */}
+
           <div className="input-group mb-3">
             <input
               type="number"
               className="form-control"
-              defaultValue={recipe ? recipe?.price : ""}
-              /*     placeholder="Price"
+              placeholder="Price"
               {...register("price", {
                 required: "price is Required",
-              })} */
+              })}
             />
           </div>
           {errors.price && (
@@ -152,53 +163,60 @@ export default function EditRecipeData() {
             <select
               className="form-select"
               aria-label="Default select example"
-              /*   {...register("categoriesIds", {
+              {...register("categoriesIds", {
                 required: "Category is Required",
-              })} */
+              })}
             >
+              <option defaultValue value={recipe?.category?.id}>
+                {recipe?.name}
+              </option>
               {categoriesList.map((category) => (
-                <option
-                  key={category.id}
-               
-                  value={category.id}
-                >
+                <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
               ))}
             </select>
           </div>
-          {/*     {errors.categoriesIds && (
+          {errors.categoriesIds && (
             <div className="text-danger m-4">
               {errors.categoriesIds.message}
             </div>
-          )} */}
+          )}
           <div className="input-group mb-3">
             <textarea
               className="form-control"
-              defaultValue={recipe ? recipe?.description : ""}
-              /*      {...register("description", {
+              {...register("description", {
                 required: "description is Required",
-              })} */
+              })}
             />
           </div>
           {errors.description && (
             <div className="text-danger m-4">{errors.description.message}</div>
           )}
-          <div className="input-group mb-3">
-            <input
-              type="file"
-            
-              className="form-control file-input"
-              /*     {...register("recipeImage", {
-                required: "recipeImage is Required",
-              })} */
-            />
+          <div>
+            <label htmlFor="uploadFile" className="file-lable">
+              <div className="d-flex w-100 flex-column  justify-content-center  align-items-center ">
+                <i className="fa fa-upload "></i>
+                <div className="m-2 fw-bold">{recipe?.imagePath}</div>
+              </div>
+              <input
+                type="file"
+                accept=".jpg,.png"
+                id="uploadFile"
+                {...register("recipeImage", {
+                  required: "recipeImage is Required",
+                })}
+                
+              />
+            </label>
           </div>
-          {/*     {errors.recipeImage && (
-            <div className="text-danger m-4">{errors.recipeImage.message}</div>
-          )} */}
-          <button className="btn btn-danger text-left m-3">Cancel</button>
-          <button className="btn btn-success text-left">Save</button>
+          {errors.recipeImage && (
+            <div className="text-danger mt-2">{errors.recipeImage.message}</div>
+          )}
+          <div className="text-end">
+            <button className="btn btn-danger text-left m-3">Cancel</button>
+            <button className="btn btn-success text-left">Save</button>
+          </div>
         </form>
       </div>
     </>
