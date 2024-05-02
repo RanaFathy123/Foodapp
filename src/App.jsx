@@ -20,6 +20,7 @@ import PrivateRoute from "./modules/SharedModule/components/PrivateRoute/Private
 import axios from "axios";
 import ReciepeData from "./modules/ReciepesModule/components/reciepedata/ReciepeData";
 import EditRecipeData from "./modules/ReciepesModule/components/editreciepedata/EditRecipeData";
+import VerfiyAccount from './modules/AuthenticationModule/components/verifyaccount/VerfiyAccount';
 
 function App() {
   const [loginData, setLoginData] = useState(null);
@@ -69,6 +70,8 @@ function App() {
         { index: true, element: <Login saveLoginData={saveLoginData} /> },
         { path: "login", element: <Login saveLoginData={saveLoginData} /> },
         { path: "register", element: <Register /> },
+        { path: "verifyaccount", element: <VerfiyAccount /> },
+
         { path: "forgetpass", element: <ForgetPassword /> },
         { path: "resetpass", element: <ResetPassword /> },
         { path: "changepass", element: <ChangePassword /> },

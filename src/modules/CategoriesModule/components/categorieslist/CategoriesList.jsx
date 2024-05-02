@@ -7,6 +7,7 @@ import categoriesHeaderImg from "../../../../assets/images/header.png";
 import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 import Header from "../../../SharedModule/components/Header/Header";
 import NoData from "../../../SharedModule/components/NoData/NoData";
+import { format } from "date-fns";
 
 export default function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState([]);
@@ -14,7 +15,8 @@ export default function CategoriesList() {
   const [mode, setMode] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [show, setShow] = useState(false);
-
+  let date = new Date();
+  console.log(new Intl.DateTimeFormat("ban", "id").format(date));
   const {
     register,
     handleSubmit,
@@ -206,14 +208,20 @@ export default function CategoriesList() {
                     <div className="d-flex align-items-center">
                       <div className="ms-3">
                         <p className="text-muted mb-0">
-                          {category.creationDate}
+                          {format(
+                            new Date(category.creationDate),
+                            "dd/MM/yyyy"
+                          )}
                         </p>
                       </div>
                     </div>
                   </td>
                   <td>
                     <p className="text-muted mb-0">
-                      {category.modificationDate}
+                      {format(
+                        new Date(category.modificationDate),
+                        "dd/MM/yyyy"
+                      )}
                     </p>
                   </td>
                   <td>

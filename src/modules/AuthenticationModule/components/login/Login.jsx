@@ -7,22 +7,27 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login({ saveLoginData }) {
+  const [checkShowPassword, setCheckShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-  const [checkShowPassword, setCheckShowPassword] = useState(false);
+
   const onSubmit = async (data) => {
+    setIsLoading(true)
     try {
       const response = await axios.post(
         "https://upskilling-egypt.com:3006/api/v1/Users/Login",
         data
       );
+
       toast.success("Login Successfully");
       localStorage.setItem("token", response.data.token);
       saveLoginData();
+    
       navigate("/dashboard");
     } catch (error) {
       toast.error(error.response.data.message);
@@ -33,12 +38,12 @@ export default function Login({ saveLoginData }) {
   };
   return (
     <>
-      <div className="auth-bg ">
+      <div className="auth-bg">
         <div className="container-fluid bg-overlay">
           <div className="row min-vh-100 h-100 justify-content-center align-items-center">
             <div className="col-md-9 bg-white p-5 border rounded border-2 form-body">
               <div className="text-center">
-                <img src={logo} alt="" className="w-25" />
+                <img src={logo} alt="" className="w-50" />
               </div>
               <div className="form-content p-3">
                 <h3>Log In</h3>
@@ -46,12 +51,12 @@ export default function Login({ saveLoginData }) {
                   Welcome Back! Please enter your details
                 </p>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="input-group mb-3" >
+                  <div className="input-group mb-3">
                     <span className="input-group-text " id="basic-addon1">
-                      <i className="fa fa-envelope"></i> 
-                    </span>       
+                      <i className="fa fa-envelope"></i>
+                    </span>
                     <input
-                      type="text"                    
+                      type="text"
                       className="form-control border-start border-secondary"
                       placeholder="Enter Your E-mail"
                       {...register("email", {
@@ -65,7 +70,7 @@ export default function Login({ saveLoginData }) {
                     />
                   </div>
                   {errors.email && (
-                    <div className="text-danger m-4">
+                    <div className="text-danger mb-4">
                       {errors.email.message}
                     </div>
                   )}
@@ -100,18 +105,18 @@ export default function Login({ saveLoginData }) {
                     </span>
                   </div>
                   {errors.password && (
-                    <div className="text-danger m-4">
+                    <div className="text-danger mb-4">
                       {errors.password.message}
                     </div>
                   )}
                   <div className="links d-flex justify-content-between my-4">
-                  <Link
+                    <Link
                       to="/register"
-                      className="text-success text-decoration-none "
+                      className="text-black text-decoration-none "
                     >
-                     Register Now?
+                      Register Now?
                     </Link>
-                    
+
                     <Link
                       to="/forgetpass"
                       className="text-success text-decoration-none "
@@ -119,7 +124,15 @@ export default function Login({ saveLoginData }) {
                       Forgot Password?
                     </Link>
                   </div>
-                  <button className="btn btn-success  w-100">Login</button>
+                  <button type="submit" className="btn btn-success w-100 fw-bold">
+                    {isLoading ? (
+                      <div className="spinner-border" role="status">
+                        <span className="sr-only">Loading...</span>
+                      </div>
+                    ) : (
+                      "Login"
+                    )}
+                  </button>
                 </form>
               </div>
             </div>

@@ -1,10 +1,10 @@
-import React, { useRef, useState } from "react";
-import logo from "../../../../assets/images/logo.svg";
-import { useForm } from "react-hook-form";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import logo from "../../../../assets/images/logo.svg";
 
 export default function ResetPassword() {
   const [checkShowPassword, setCheckShowPassword] = useState(false);
@@ -19,11 +19,14 @@ export default function ResetPassword() {
   } = useForm();
   const navigate = useNavigate();
 
+ 
+
   const onSubmit = async (data) => {
+ 
     try {
       const response = await axios.post(
         "https://upskilling-egypt.com:3006/api/v1/Users/Reset",
-        data
+        resgiterFormData
       );
       console.log(response);
       toast.success(response.data.message);
@@ -72,7 +75,7 @@ export default function ResetPassword() {
                     />
                   </div>
                   {errors.email && (
-                    <div className="text-danger m-4">
+                    <div className="text-danger mb-4">
                       {errors.email.message}
                     </div>
                   )}
@@ -90,7 +93,9 @@ export default function ResetPassword() {
                     />
                   </div>
                   {errors.seed && (
-                    <div className="text-danger m-4">{errors.seed.message}</div>
+                    <div className="text-danger mb-4">
+                      {errors.seed.message}
+                    </div>
                   )}
                   <div className="input-group mb-3">
                     <span className="input-group-text " id="basic-addon1">
@@ -123,7 +128,7 @@ export default function ResetPassword() {
                     </span>
                   </div>
                   {errors.password && (
-                    <div className="text-danger m-4">
+                    <div className="text-danger mb-4">
                       {errors.password.message}
                     </div>
                   )}
@@ -160,12 +165,17 @@ export default function ResetPassword() {
                     </span>
                   </div>
                   {errors.confirmPassword && (
-                    <div className="text-danger m-4">
+                    <div className="text-danger mb-4">
                       {errors.confirmPassword.message}
                     </div>
                   )}
                   <div className="links d-flex justify-content-between my-4">
-                    <a>Register Now?</a>
+                    <Link
+                      to="/register"
+                      className="text-success text-decoration-none "
+                    >
+                      Register Now?
+                    </Link>
                     <Link
                       to="/forgetpass"
                       className="text-success text-decoration-none "

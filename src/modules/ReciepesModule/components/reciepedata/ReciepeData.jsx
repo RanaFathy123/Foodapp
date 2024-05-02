@@ -5,9 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ReciepeListHeader } from "../../../SharedModule/components/ReciepeListHeader/ReciepeListHeader";
 
+
+
 export default function ReciepeData() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [tagsList, setTagsList] = useState([]);
+
 
   const navigate = useNavigate();
 
@@ -16,6 +19,7 @@ export default function ReciepeData() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
 
   const appendToFormData = (data) => {
     const formData = new FormData();
@@ -28,8 +32,9 @@ export default function ReciepeData() {
     return formData;
   };
   const onSubmit = async (data) => {
+    console.log(data);
     let recipeFormData = appendToFormData(data);
- 
+
     try {
       const response = await axios.post(
         "https://upskilling-egypt.com:3006/api/v1/Recipe",
@@ -59,6 +64,7 @@ export default function ReciepeData() {
       console.log(error);
     }
   };
+
   const getCategories = async () => {
     try {
       const response = await axios.get(
@@ -78,101 +84,110 @@ export default function ReciepeData() {
   }, []);
   return (
     <>
-    <ReciepeListHeader/>
-    <div className="p-5">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className="form-control "
-            placeholder="Recipe Name"
-            {...register("name", {
-              required: "name  is Required",
-            })}
-          />
-        </div>
-        {errors.name && (
-          <div className="text-danger m-4">{errors.name.message}</div>
-        )}
-        <div className="input-group mb-3">
-          <select
-            className="form-select"
-            aria-label="Default select example"
-            {...register("tagId", {
-              required: "tag is Required",
-            })}
-          >
-            <option value="">Tag</option>
-            {tagsList.map((tag) => (
-              <option key={tag.id} value={tag.id}>
-                {tag.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        {errors.tagId && (
-          <div className="text-danger m-4">{errors.tagId.message}</div>
-        )}
-        <div className="input-group mb-3">
-          <input
-            type="number"
-            className="form-control"
-            placeholder="Price"
-            {...register("price", {
-              required: "price is Required",
-            })}
-          />
-        </div>
-        {errors.price && (
-          <div className="text-danger m-4">{errors.price.message}</div>
-        )}
-        <div className="input-group mb-3">
-          <select
-            className="form-select"
-            aria-label="Default select example"
-            {...register("categoriesIds", {
-              required: "Category is Required",
-            })}
-          >
-            <option value="">Category</option>
-            {categoriesList.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        {errors.categoriesIds && (
-          <div className="text-danger m-4">{errors.categoriesIds.message}</div>
-        )}
-        <div className="input-group mb-3">
-          <textarea
-            className="form-control"
-            {...register("description", {
-              required: "description is Required",
-            })}
-          />
-        </div>
-        {errors.description && (
-          <div className="text-danger m-4">{errors.description.message}</div>
-        )}
-        <div className="input-group mb-3">
-          <input
-            type="file"
-            className="form-control file-input"
-            {...register("recipeImage", {
-              required: "recipeImage is Required",
-            })}
-          />
-        </div>
-        {errors.recipeImage && (
-          <div className="text-danger m-4">{errors.recipeImage.message}</div>
-        )}
-        <button className="btn btn-danger text-left m-3">Cancel</button>
-        <button className="btn btn-success text-left">Save</button>
-      </form>
-    </div>
+      <ReciepeListHeader />
+      <div className="p-4">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              className="form-control "
+              placeholder="Recipe Name"
+              {...register("name", {
+                required: "name  is Required",
+              })}
+            />
+          </div>
+          {errors.name && (
+            <div className="text-danger mb-2">{errors.name.message}</div>
+          )}
+          <div className="input-group mb-3">
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              {...register("tagId", {
+                required: "tag is Required",
+              })}
+            >
+              <option value="">Tag</option>
+              {tagsList.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          {errors.tagId && (
+            <div className="text-danger mb-2">{errors.tagId.message}</div>
+          )}
+          <div className="input-group mb-3">
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Price"
+              {...register("price", {
+                required: "price is Required",
+              })}
+            />
+          </div>
+          {errors.price && (
+            <div className="text-danger mb-2">{errors.price.message}</div>
+          )}
+          <div className="input-group mb-3">
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              {...register("categoriesIds", {
+                required: "Category is Required",
+              })}
+            >
+              <option value="">Category</option>
+              {categoriesList.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          {errors.categoriesIds && (
+            <div className="text-danger mb-2">
+              {errors.categoriesIds.message}
+            </div>
+          )}
+          <div className="input-group mb-3">
+            <textarea
+              className="form-control border border-2"
+              {...register("description", {
+                required: "description is Required",
+              })}
+            />
+          </div>
+          {errors.description && (
+            <div className="text-danger mb-2">{errors.description.message}</div>
+          )}
+          <div>
+            <label htmlFor="uploadFile" className="file-lable">
+              <div className="d-flex w-100 flex-column  justify-content-center  align-items-center ">
+                <i className="fa fa-upload "></i>
+                <div className="m-2 fw-bold">Drag & Drop or <span className="text-success">Choose a Item Image </span>to Upload</div>
+              </div>   
+              <input
+                type="file"
+                accept=".jpg,.png"
+                id="uploadFile"
+                {...register("recipeImage", {
+                  required: "recipeImage is Required",
+                })}
+              />
+            </label>
+          </div>
+          {errors.recipeImage && (
+            <div className="text-danger mt-2">{errors.recipeImage.message}</div>
+          )}
+
+          <button className="btn btn-danger text-left m-3">Cancel</button>
+          <button className="btn btn-success text-left">Save</button>
+        </form>
+      </div>
     </>
-    
   );
 }

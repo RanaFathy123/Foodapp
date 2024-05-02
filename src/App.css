@@ -71,5 +71,38 @@
 .modal-header {
   border: none !important;
 }
+/* input[type="file"] { */
+  /*  */
+  /* background-color: initial; */
+  /* cursor: default; */
+  /* align-items: baseline; */
+  /* color: inherit; */
+  /* text-overflow: ellipsis; */
+  /* text-align: start !important; */
+  /* padding: initial; */
+  /* border: initial; */
+  /* white-space: pre; */
+ /*  */
+/* } */
 
-
+.file-lable {
+  position: relative;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 322px;
+  max-width: 1200px;
+  height: 90px;
+  border: 2px dashed rgba(0, 146, 71, 1);
+  padding: 8px 16px 8px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  -webkit-box-flex: 0;
+  flex-grow: 0;
+}
+.file-lable > input {
+  display: block;
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+}
