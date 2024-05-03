@@ -11,8 +11,9 @@ export default function ReciepeData() {
   const [fileInputContent, setFileInputContent] = useState(
     "Drag & Drop or Choose a Item Image to Upload"
   );
-  const handleInputContent = () => {
+  const handleInputContent = (input) => {
     setFileInputContent("File Uploaded Successfully");
+    console.log(input.target.value);
   };
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ export default function ReciepeData() {
   };
   const onSubmit = async (data) => {
     let recipeFormData = appendToFormData(data);
+
     try {
       const response = await axios.post(
         "https://upskilling-egypt.com:3006/api/v1/Recipe",

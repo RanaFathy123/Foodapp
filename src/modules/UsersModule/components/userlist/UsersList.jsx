@@ -73,8 +73,8 @@ export default function UsersList({ title, description, imgUrl }) {
         }
         imgUrl={userHeaderImg}
       />
-      <div className="container-fluid mt-3 mb-2 px-2 w-100">
-        <div className="d-flex flex-wrap justify-content-between  align-items-center container">
+      <div className="container-fluid mt-3 mb-2 px-4 w-100">
+        <div className="d-flex flex-wrap justify-content-between  align-items-center ">
           <div>
             <h4>Users Table Details</h4>
             <p>You can check all details</p>
@@ -84,7 +84,7 @@ export default function UsersList({ title, description, imgUrl }) {
           </div>
         </div>
       </div>
-      <div className="container my-3">
+      <div className="container-fluid my-3">
         <div className="row">
           <div className="col-md-3">
             <input

@@ -7,8 +7,7 @@ import categoriesHeaderImg from "../../../../assets/images/header.png";
 import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 import Header from "../../../SharedModule/components/Header/Header";
 import NoData from "../../../SharedModule/components/NoData/NoData";
-import { format } from "date-fns";
-import { tr } from "date-fns/locale";
+
 
 export default function CategoriesList() {
   const [categoriesList, setCategoriesList] = useState([]);
@@ -202,8 +201,8 @@ export default function CategoriesList() {
         }
         imgUrl={categoriesHeaderImg}
       />
-      <div className="container-fluid mt-3 mb-2 px-2 w-100">
-        <div className="d-flex flex-wrap justify-content-between  align-items-center container">
+      <div className="container-fluid mt-3 mb-2 px-4 w-100">
+        <div className="d-flex flex-wrap justify-content-between  align-items-center ">
           <div>
             <h4>Categories Table Details</h4>
             <p>You can check all details</p>
@@ -215,7 +214,7 @@ export default function CategoriesList() {
           </div>
         </div>
       </div>
-      <div className="container my-3">
+      <div className="container-fluid my-3">
         <div className="row">
           <div className="col-md-12">
             <input
@@ -248,9 +247,8 @@ export default function CategoriesList() {
                     <div className="d-flex align-items-center">
                       <div className="ms-3">
                         <p className="text-muted mb-0">
-                          {format(
-                            new Date(category.creationDate),
-                            "dd/MM/yyyy"
+                          {new Date(category.creationDate).toLocaleDateString(
+                            "en-GB"
                           )}
                         </p>
                       </div>
@@ -258,9 +256,8 @@ export default function CategoriesList() {
                   </td>
                   <td>
                     <p className="text-muted mb-0">
-                      {format(
-                        new Date(category.modificationDate),
-                        "dd/MM/yyyy"
+                      {new Date(category.modificationDate).toLocaleDateString(
+                        "en-GB"
                       )}
                     </p>
                   </td>

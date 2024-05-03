@@ -134,7 +134,6 @@ export default function ReciepesList() {
           </button>
         </Modal.Body>
       </Modal>
-
       <Header
         title={"Recipes Items"}
         description={
@@ -142,8 +141,8 @@ export default function ReciepesList() {
         }
         imgUrl={reciepeHeaderImg}
       />
-      <div className="container-fluid mt-3 mb-2 px-2 w-100">
-        <div className="d-flex flex-wrap justify-content-between  align-items-center container">
+      <div className="container-fluid mt-3 mb-2 px-4 w-100">
+        <div className="d-flex flex-wrap justify-content-between  align-items-center ">
           <div>
             <h4>Recipe Table Details</h4>
             <p>You can check all details</p>
@@ -155,7 +154,7 @@ export default function ReciepesList() {
           </div>
         </div>
       </div>
-      <div className="container my-3">
+      <div className="container-fluid my-3">
         <div className="row">
           <div className="col-md-6">
             <input
@@ -275,7 +274,7 @@ export default function ReciepesList() {
         </table>
         {reciepesList.length == 0 && <NoData />}
         <nav
-          aria-label="Page navigation example "
+          aria-label="Page navigation example"
           style={{ display: "flex", justifyContent: "end" }}
         >
           <ul className="pagination">

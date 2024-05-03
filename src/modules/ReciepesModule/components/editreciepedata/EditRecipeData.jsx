@@ -17,13 +17,12 @@ export default function EditRecipeData() {
     reset,
 
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      name: recipe ? recipe?.name : "",
-    },
-  });
+  } = useForm();
 
   const { recipeId } = useParams();
+  const handleEditSora=(input)=>{
+console.log(input.target.value);
+  }
 
   const getReciepe = async () => {
     try {
@@ -33,14 +32,15 @@ export default function EditRecipeData() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-
+      console.log(response.data);
       setReciepe(response.data);
       reset({
         name: response.data.name,
         price: response.data.price,
         description: response.data.description,
-        tag: response.data.tag.name,
-        category: response.data.category[0].name,
+        tag: response.data.tag,
+        category:response.data.category[0].name,
+        imagePath:response.data.imagePath,
       });
     } catch (err) {
       console.log(err);
@@ -59,6 +59,7 @@ export default function EditRecipeData() {
 
   const onSubmit = async (data) => {
     let recipeFormData = appendToFormData(data);
+
     try {
       const response = await axios.put(
         `https://upskilling-egypt.com:3006/api/v1/Recipe/${recipeId}`,
@@ -68,7 +69,7 @@ export default function EditRecipeData() {
         }
       );
       console.log(response);
-      toast.success(response.data.message);
+      toast.success('Reciepe Edited Successfully');
       navigate("/dashboard/reciepes");
     } catch (err) {
       console.log(err);
@@ -167,8 +168,17 @@ export default function EditRecipeData() {
                 required: "Category is Required",
               })}
             >
-              <option defaultValue value={recipe?.category?.id}>
-                {recipe?.name}
+              <option
+                defaultValue
+                value={
+                  recipe?.category && recipe.category.length > 0
+                    ? recipe.category[0]?.id
+                    : ""
+                }
+              >
+                {recipe?.category && recipe.category.length > 0
+                  ? recipe.category[0]?.name
+                  : ""}
               </option>
               {categoriesList.map((category) => (
                 <option key={category.id} value={category.id}>
@@ -206,7 +216,7 @@ export default function EditRecipeData() {
                 {...register("recipeImage", {
                   required: "recipeImage is Required",
                 })}
-                
+             onChange={handleEditSora}
               />
             </label>
           </div>
