@@ -19,10 +19,7 @@ export default function ResetPassword() {
   } = useForm();
   const navigate = useNavigate();
 
- 
-
   const onSubmit = async (data) => {
- 
     try {
       const response = await axios.post(
         "https://upskilling-egypt.com:3006/api/v1/Users/Reset",
@@ -37,6 +34,7 @@ export default function ResetPassword() {
   };
   const showPassword = () => {
     setCheckShowPassword(!checkShowPassword);
+    
   };
   const showConfirmPassword = () => {
     setCheckShowConfirmPassword(!checkShowConfirmPassword);

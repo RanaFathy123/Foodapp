@@ -20,7 +20,8 @@ import PrivateRoute from "./modules/SharedModule/components/PrivateRoute/Private
 import axios from "axios";
 import ReciepeData from "./modules/ReciepesModule/components/reciepedata/ReciepeData";
 import EditRecipeData from "./modules/ReciepesModule/components/editreciepedata/EditRecipeData";
-import VerfiyAccount from './modules/AuthenticationModule/components/verifyaccount/VerfiyAccount';
+import VerfiyAccount from "./modules/AuthenticationModule/components/verifyaccount/VerfiyAccount";
+import Favorites from "./modules/FavoritesModule/Favorites.jsx";
 
 function App() {
   const [loginData, setLoginData] = useState(null);
@@ -47,10 +48,19 @@ function App() {
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Dashboard /> },
-        { path: "reciepes", element: <ReciepesList /> },
+        { path: "reciepes", element: <ReciepesList loginData={loginData}  /> },
         { path: "reciepedata", element: <ReciepeData /> },
+        { path: "favorites", element: <Favorites /> },
         { path: "editreciepe/:recipeId", element: <EditRecipeData /> },
-        { path: "categories", element: <CategoriesList  /> },
+        {
+          path: "categories",
+          element:
+            loginData?.userGroup == "SuperAdmin" ? (
+              <CategoriesList loginData={loginData} />
+            ) : (
+              <NotFound />
+            ),
+        },
         { path: "users", element: <UsersList /> },
         {
           path: "*",

@@ -9,7 +9,7 @@ export default function MasterLayout({setLoginData,loginData}) {
     <div className="container-fluid p-0">
       <div className="d-flex">
         <div >
-          <SideBar setLoginData={setLoginData} />
+          <SideBar setLoginData={setLoginData} loginData={loginData} />
         </div>
         <div className="w-100" >
           <NavBar loginData={loginData}/>

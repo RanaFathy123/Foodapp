@@ -30,6 +30,8 @@ export default function Login({ saveLoginData }) {
     
       navigate("/dashboard");
     } catch (error) {
+    setIsLoading(false)
+
       toast.error(error.response.data.message);
     }
   };

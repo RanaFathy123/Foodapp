@@ -35,7 +35,6 @@ export default function ReciepeData() {
   };
   const onSubmit = async (data) => {
     let recipeFormData = appendToFormData(data);
-
     try {
       const response = await axios.post(
         "https://upskilling-egypt.com:3006/api/v1/Recipe",

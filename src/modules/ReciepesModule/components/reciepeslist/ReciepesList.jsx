@@ -9,7 +9,7 @@ import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 import Header from "../../../SharedModule/components/Header/Header";
 import NoData from "../../../SharedModule/components/NoData/NoData";
 
-export default function ReciepesList() {
+export default function ReciepesList({ loginData }) {
   const [reciepesList, setReciepesList] = useState([]);
   const [showDelete, setShowDelete] = useState(false);
   const [recipeId, setReciepeId] = useState("");
@@ -19,6 +19,8 @@ export default function ReciepesList() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [tagsList, setTagsList] = useState([]);
   const [pageNumbers, setPageNumbers] = useState([]);
+  const [showReciepe, setShowReciepe] = useState(false);
+  const [reciepe, setReciepe] = useState({});
 
   const navigate = useNavigate();
 
@@ -30,8 +32,33 @@ export default function ReciepesList() {
     setShowDelete(true);
     setReciepeId(id);
   };
+  const handleShowReciepe = (reciepe) => {
+    setReciepe(reciepe);
+    setShowReciepe(true);
+  };
+  const handleCloseReciepe = () => {
+    setShowReciepe(false);
+  };
   const handleCloseDelete = () => {
     setShowDelete(false);
+  };
+  const addToFavorite = async (recipe) => {
+    try {
+      const addResponse = await axios.post(
+        "https://upskilling-egypt.com:3006/api/v1/userRecipe",
+        { recipeId: recipe.id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      toast.success("Recipe Added Successfully");
+      handleCloseReciepe();
+      navigate("/dashboard/favorites");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
   const getTags = async () => {
     try {
@@ -75,7 +102,7 @@ export default function ReciepesList() {
           },
         }
       );
-      console.log(response.data.totalNumberOfPages);
+
       setPageNumbers(
         Array(response.data.totalNumberOfPages)
           .fill()
@@ -134,6 +161,37 @@ export default function ReciepesList() {
           </button>
         </Modal.Body>
       </Modal>
+      <Modal show={showReciepe} onHide={handleCloseReciepe}>
+        <Modal.Header closeButton>
+          <h4>Recipe Details</h4>
+        </Modal.Header>
+        <Modal.Body>
+          {reciepe?.imagePath ? (
+            <img
+              className="rounded border border-1  mx-auto d-block"
+              style={{ width: "242px", height: "168px" }}
+              src={`https://upskilling-egypt.com:3006/${reciepe?.imagePath}`}
+              alt="reciepe"
+            />
+          ) : (
+            <img
+              src={noDataImg}
+              className="rounded border border-1  mx-auto d-block"
+              style={{ width: "242px", height: "168px" }}
+              alt="no reciepe"
+            />
+          )}
+          <div className="fw-bold mt-2">
+            description : {reciepe?.description}
+          </div>
+          <button
+            className="btn btn-outline-dark ms-auto d-block"
+            onClick={() => addToFavorite(reciepe)}
+          >
+            Favorite
+          </button>
+        </Modal.Body>
+      </Modal>
       <Header
         title={"Recipes Items"}
         description={
@@ -148,9 +206,16 @@ export default function ReciepesList() {
             <p>You can check all details</p>
           </div>
           <div>
-            <button className="btn btn-success px-5" onClick={goToReciepeData}>
-              Add New Item
-            </button>
+            {loginData?.userGroup == "SuperAdmin" ? (
+              <button
+                className="btn btn-success px-5"
+                onClick={goToReciepeData}
+              >
+                Add New Item
+              </button>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
@@ -257,15 +322,24 @@ export default function ReciepesList() {
                   </td>
                   <td>
                     <div className="d-flex gap-3 align-items-center ">
-                      <i className="fa fa-eye text-primary "></i>
-                      <Link to={`/dashboard/editreciepe/${reciepe.id}`}>
-                        <i className="fa fa-edit text-warning"></i>
-                      </Link>
-
                       <i
-                        className="fa fa-trash text-danger"
-                        onClick={() => handleShowDelete(reciepe.id)}
+                        className="fa fa-eye text-primary "
+                        onClick={() => handleShowReciepe(reciepe)}
                       ></i>
+                      {loginData?.userGroup == "SuperAdmin" ? (
+                        <>
+                          <Link to={`/dashboard/editreciepe/${reciepe.id}`}>
+                            <i className="fa fa-edit text-warning"></i>
+                          </Link>
+
+                          <i
+                            className="fa fa-trash text-danger"
+                            onClick={() => handleShowDelete(reciepe.id)}
+                          ></i>
+                        </>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </td>
                 </tr>

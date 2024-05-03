@@ -7,9 +7,10 @@ import categoriesHeaderImg from "../../../../assets/images/header.png";
 import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 import Header from "../../../SharedModule/components/Header/Header";
 import NoData from "../../../SharedModule/components/NoData/NoData";
+import NotFound from "../../../SharedModule/components/Notfound/NotFound";
+import { Navigate } from "react-router-dom";
 
-
-export default function CategoriesList() {
+export default function CategoriesList({ loginData }) {
   const [categoriesList, setCategoriesList] = useState([]);
   const [modalTitle, setModalTitle] = useState("");
   const [mode, setMode] = useState("");
@@ -60,7 +61,7 @@ export default function CategoriesList() {
   const handleClose = () => {
     setShow(false);
   };
-
+  console.log(loginData);
   const getCategories = async (name, pageSize = 20, pageNumber) => {
     try {
       const response = await axios.get(
