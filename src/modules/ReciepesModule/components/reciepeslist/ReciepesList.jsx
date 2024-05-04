@@ -107,7 +107,7 @@ export default function ReciepesList({ loginData }) {
   const getReciepes = async (name, tagId, categoryId, pageSize, pageNumber) => {
     try {
       const response = await axios.get(
-        `https://upskilling-egypt.com:3006/api/v1/Recipe/?pageSize=15&pageNumber=${pageNumber}`,
+        `https://upskilling-egypt.com:3006/api/v1/Recipe/?pageSize=20&pageNumber=${pageNumber}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           params: {
@@ -162,19 +162,19 @@ export default function ReciepesList({ loginData }) {
   };
   const getReciepeValue = (input) => {
     setReciepeName(input.target.value);
-    getReciepes(input.target.value, reciepeTag, reciepeCategory, 15, 1);
+    getReciepes(input.target.value, reciepeTag, reciepeCategory, 20, 1);
   };
   const getReciepeTagValue = (select) => {
     setReciepeTag(select.target.value);
-    getReciepes(reciepeName, select.target.value, reciepeCategory, 15, 1);
+    getReciepes(reciepeName, select.target.value, reciepeCategory, 20, 1);
   };
   const getReciepeCategoryValue = (select) => {
     console.log(select.target.value);
     setReciepeCategory(select.target.value);
-    getReciepes(reciepeName, reciepeTag, select.target.value, 15, 1);
+    getReciepes(reciepeName, reciepeTag, select.target.value, 20, 1);
   };
   useEffect(() => {
-    getReciepes("", "", "", 15, 1);
+    getReciepes("", "", "", 20, 1);
     getTags();
     getCategories();
     if (loginData?.userGroup == "SystemUser") {
@@ -404,7 +404,7 @@ export default function ReciepesList({ loginData }) {
                     reciepeName,
                     reciepeTag,
                     reciepeCategory,
-                    15,
+                    20,
                     pageNo
                   )
                 }
