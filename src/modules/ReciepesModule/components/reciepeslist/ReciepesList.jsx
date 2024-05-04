@@ -11,6 +11,7 @@ import NoData from "../../../SharedModule/components/NoData/NoData";
 
 export default function ReciepesList({ loginData }) {
   const [reciepesList, setReciepesList] = useState([]);
+  const [favoritesList, setFavoritesList] = useState([]);
   const [showDelete, setShowDelete] = useState(false);
   const [recipeId, setReciepeId] = useState("");
   const [reciepeName, setReciepeName] = useState("");
@@ -20,8 +21,8 @@ export default function ReciepesList({ loginData }) {
   const [tagsList, setTagsList] = useState([]);
   const [pageNumbers, setPageNumbers] = useState([]);
   const [showReciepe, setShowReciepe] = useState(false);
-  const [reciepe, setReciepe] = useState({});
 
+  const [reciepe, setReciepe] = useState({});
   const navigate = useNavigate();
 
   const goToReciepeData = () => {
@@ -42,6 +43,7 @@ export default function ReciepesList({ loginData }) {
   const handleCloseDelete = () => {
     setShowDelete(false);
   };
+
   const addToFavorite = async (recipe) => {
     try {
       const addResponse = await axios.post(
@@ -53,13 +55,15 @@ export default function ReciepesList({ loginData }) {
           },
         }
       );
+      console.log(addResponse.data.reciepe);
       toast.success("Recipe Added Successfully");
       handleCloseReciepe();
       navigate("/dashboard/favorites");
     } catch (error) {
-      console.error("Error:", error);
+      console.log(error);
     }
   };
+
   const getTags = async () => {
     try {
       const response = await axios.get(
@@ -88,7 +92,21 @@ export default function ReciepesList({ loginData }) {
       console.log(error);
     }
   };
-
+  const getFavoritesList = async () => {
+    try {
+      const response = await axios.get(
+        "https://upskilling-egypt.com:3006/api/v1/userRecipe",
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      console.log(response);
+      return response
+    
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const getReciepes = async (name, tagId, categoryId, pageSize, pageNumber) => {
     try {
       const response = await axios.get(
@@ -108,7 +126,24 @@ export default function ReciepesList({ loginData }) {
           .fill()
           .map((_, i) => i + 1)
       );
-      setReciepesList(response.data.data);
+
+      if (loginData?.userGroup == "SystemUser") {
+        let reciepesData = response.data.data;
+        let favorites = await getFavoritesList();
+        let favoritesData = favorites.data.data;
+
+        let filtertedReciepes = reciepesData.filter((recipes) => {
+          return favoritesData.every((favorite) => {
+            return favorite.recipe.name !== recipes.name;
+          });
+        });
+        console.log(filtertedReciepes);
+        setReciepesList(filtertedReciepes);
+      }else{
+        setReciepesList(response.data.data);
+      }
+     
+     
     } catch (error) {
       console.log(error);
     }
@@ -139,6 +174,7 @@ export default function ReciepesList({ loginData }) {
     getReciepes(reciepeName, select.target.value, reciepeCategory, 5, 1);
   };
   const getReciepeCategoryValue = (select) => {
+    console.log(select.target.value);
     setReciepeCategory(select.target.value);
     getReciepes(reciepeName, reciepeTag, select.target.value, 5, 1);
   };
@@ -146,6 +182,10 @@ export default function ReciepesList({ loginData }) {
     getReciepes("", "", "", 5, 1);
     getTags();
     getCategories();
+    if(loginData?.userGroup == "SystemUser"){
+      getFavoritesList();
+    }
+    
   }, []);
   return (
     <>
@@ -184,12 +224,16 @@ export default function ReciepesList({ loginData }) {
           <div className="fw-bold mt-2">
             description : {reciepe?.description}
           </div>
-          <button
-            className="btn btn-outline-dark ms-auto d-block"
-            onClick={() => addToFavorite(reciepe)}
-          >
-            Favorite
-          </button>
+          {loginData?.userGroup == "SystemUser" ? (
+            <button
+              className="btn btn-outline-dark ms-auto d-block"
+              onClick={() => addToFavorite(reciepe)}
+            >
+              Favorite
+            </button>
+          ) : (
+            ""
+          )}
         </Modal.Body>
       </Modal>
       <Header

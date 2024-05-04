@@ -80,7 +80,7 @@ export default function SideBar({ setLoginData, loginData }) {
             >
               Recipes
             </MenuItem>
-            {loginData?.userGroup == "SuperAdmin" ?<MenuItem
+            { loginData?.userGroup == "SuperAdmin"?<MenuItem
               icon={<i className="fa-solid fa-calendar-days" />}
               component={<Link to="/dashboard/categories" />}
             >
