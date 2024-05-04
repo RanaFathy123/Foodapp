@@ -182,11 +182,7 @@ export default function UsersList({ title, description, imgUrl }) {
                     </div>
                   </td>
                   <td>
-                    <div className="d-flex gap-3 align-items-center ">
-                      <i className="fa fa-eye text-primary "></i>
-                      <i className="fa fa-edit text-warning"></i>
-                      <i className="fa fa-trash text-danger"></i>
-                    </div>
+                    <i className="fa fa-trash text-danger text-center "></i>
                   </td>
                 </tr>
               ))}

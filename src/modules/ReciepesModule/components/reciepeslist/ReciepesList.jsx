@@ -11,7 +11,6 @@ import NoData from "../../../SharedModule/components/NoData/NoData";
 
 export default function ReciepesList({ loginData }) {
   const [reciepesList, setReciepesList] = useState([]);
-  const [favoritesList, setFavoritesList] = useState([]);
   const [showDelete, setShowDelete] = useState(false);
   const [recipeId, setReciepeId] = useState("");
   const [reciepeName, setReciepeName] = useState("");
@@ -55,7 +54,7 @@ export default function ReciepesList({ loginData }) {
           },
         }
       );
-      console.log(addResponse.data.reciepe);
+
       toast.success("Recipe Added Successfully");
       handleCloseReciepe();
       navigate("/dashboard/favorites");
@@ -100,9 +99,7 @@ export default function ReciepesList({ loginData }) {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      console.log(response);
-      return response
-    
+      return response;
     } catch (error) {
       console.log(error);
     }
@@ -137,13 +134,11 @@ export default function ReciepesList({ loginData }) {
             return favorite.recipe.name !== recipes.name;
           });
         });
-        console.log(filtertedReciepes);
+
         setReciepesList(filtertedReciepes);
-      }else{
+      } else {
         setReciepesList(response.data.data);
       }
-     
-     
     } catch (error) {
       console.log(error);
     }
@@ -182,10 +177,9 @@ export default function ReciepesList({ loginData }) {
     getReciepes("", "", "", 5, 1);
     getTags();
     getCategories();
-    if(loginData?.userGroup == "SystemUser"){
+    if (loginData?.userGroup == "SystemUser") {
       getFavoritesList();
     }
-    
   }, []);
   return (
     <>
