@@ -11,9 +11,8 @@ export default function MasterLayout({setLoginData,loginData}) {
         <div >
           <SideBar setLoginData={setLoginData} loginData={loginData} />
         </div>
-        <div className="w-100" >
+        <div className="w-100 overflow-y-auto vh-100 " >
           <NavBar loginData={loginData}/>
-         
           <Outlet />
         </div>
       </div>

@@ -81,7 +81,7 @@ export default function ReciepesList({ loginData }) {
   const getCategories = async () => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1",
+        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=15&pageNumber=1",
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -107,7 +107,7 @@ export default function ReciepesList({ loginData }) {
   const getReciepes = async (name, tagId, categoryId, pageSize, pageNumber) => {
     try {
       const response = await axios.get(
-        `https://upskilling-egypt.com:3006/api/v1/Recipe/?pageSize=5&pageNumber=${pageNumber}`,
+        `https://upskilling-egypt.com:3006/api/v1/Recipe/?pageSize=15&pageNumber=${pageNumber}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           params: {
@@ -162,19 +162,19 @@ export default function ReciepesList({ loginData }) {
   };
   const getReciepeValue = (input) => {
     setReciepeName(input.target.value);
-    getReciepes(input.target.value, reciepeTag, reciepeCategory, 5, 1);
+    getReciepes(input.target.value, reciepeTag, reciepeCategory, 15, 1);
   };
   const getReciepeTagValue = (select) => {
     setReciepeTag(select.target.value);
-    getReciepes(reciepeName, select.target.value, reciepeCategory, 5, 1);
+    getReciepes(reciepeName, select.target.value, reciepeCategory, 15, 1);
   };
   const getReciepeCategoryValue = (select) => {
     console.log(select.target.value);
     setReciepeCategory(select.target.value);
-    getReciepes(reciepeName, reciepeTag, select.target.value, 5, 1);
+    getReciepes(reciepeName, reciepeTag, select.target.value, 15, 1);
   };
   useEffect(() => {
-    getReciepes("", "", "", 5, 1);
+    getReciepes("", "", "", 15, 1);
     getTags();
     getCategories();
     if (loginData?.userGroup == "SystemUser") {
@@ -237,7 +237,7 @@ export default function ReciepesList({ loginData }) {
         }
         imgUrl={reciepeHeaderImg}
       />
-      <div className="container-fluid mt-3 mb-2 px-4 w-100">
+      <div className="container-fluid mt-3 mb-2 px-4 w-150">
         <div className="d-flex flex-wrap justify-content-between  align-items-center ">
           <div>
             <h4>Recipe Table Details</h4>
@@ -300,8 +300,8 @@ export default function ReciepesList({ loginData }) {
         </div>
       </div>
       <div className="table-responsive  px-3 border-none ">
-        <table className="table align-middle mb-0 rounded p-5 w-100 table-borderless">
-          <thead className="bg-primary text-white bg-info h-100 table-secondary  p-5">
+        <table className="table align-middle mb-0 rounded p-5 w-150 table-borderless">
+          <thead className="bg-primary text-white bg-info h-150 table-secondary  p-5">
             <tr>
               <th className="p-4 ">Name</th>
               <th className="py-4">Image</th>
@@ -404,7 +404,7 @@ export default function ReciepesList({ loginData }) {
                     reciepeName,
                     reciepeTag,
                     reciepeCategory,
-                    5,
+                    15,
                     pageNo
                   )
                 }
