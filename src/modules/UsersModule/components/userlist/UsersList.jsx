@@ -4,14 +4,26 @@ import Header from "../../../SharedModule/components/Header/Header";
 import axios from "axios";
 import NoData from "../../../SharedModule/components/NoData/NoData";
 import noDataImg from "../../../../assets/images/no-data.png";
-export default function UsersList({ title, description, imgUrl }) {
+import Modal from "react-bootstrap/Modal";
+import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
+import { toast } from "react-toastify";
+export default function UsersList() {
   const [usersList, setUsersList] = useState([]);
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [country, setCountry] = useState("");
   const [group, setGroup] = useState("");
   const [pageNumbers, setPageNumbers] = useState([]);
+  const [showDelete, setShowDelete] = useState(false);
+  const [userId, setUserId] = useState("");
 
+  const handleShowDelete = (id) => {
+    setShowDelete(true);
+    setUserId(id);
+  };
+  const handleCloseDelete = () => {
+    setShowDelete(false);
+  };
   const getUsersList = async (
     userName,
     email,
@@ -60,12 +72,38 @@ export default function UsersList({ title, description, imgUrl }) {
     setGroup(select.target.value);
     getUsersList(userName, email, country, select.target.value);
   };
+
+  const deleteUser = async () => {
+    try {
+      const response = await axios.delete(
+        `https://upskilling-egypt.com:3006/api/v1/Users/${userId}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      console.log(response);
+      toast.success(response.data.message)
+      getUsersList();
+      handleCloseDelete()
+    } catch (error) {
+      toast.error(error.response.data.message)
+      console.log(error.response.data.message);
+      handleCloseDelete()
+    }
+  };
   useEffect(() => {
     getUsersList("", "", "", "", 20, 1);
   }, []);
 
   return (
     <div>
+      <Modal show={showDelete} onHide={handleCloseDelete}>
+        <Modal.Header closeButton></Modal.Header>
+        <Modal.Body>
+          <DeleteData title={"User"} />
+          <button className="btn btn-danger ms-auto d-block " onClick={deleteUser}>Delete</button>
+        </Modal.Body>
+      </Modal>
       <Header
         title={"Users List"}
         description={
@@ -79,9 +117,7 @@ export default function UsersList({ title, description, imgUrl }) {
             <h4>Users Table Details</h4>
             <p>You can check all details</p>
           </div>
-          <div>
-            <button className="btn btn-success px-5">Add New Item</button>
-          </div>
+       
         </div>
       </div>
       <div className="container-fluid my-3">
@@ -182,7 +218,10 @@ export default function UsersList({ title, description, imgUrl }) {
                     </div>
                   </td>
                   <td>
-                    <i className="fa fa-trash text-danger text-center "></i>
+                    <i
+                      className="fa fa-trash text-danger text-center "
+                      onClick={() => handleShowDelete(user.id)}
+                    ></i>
                   </td>
                 </tr>
               ))}

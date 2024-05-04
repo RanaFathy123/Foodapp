@@ -146,7 +146,6 @@ console.log(input.target.value);
               ))}
             </select>
           </div>
-
           <div className="input-group mb-3">
             <input
               type="number"
