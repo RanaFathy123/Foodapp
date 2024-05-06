@@ -180,7 +180,7 @@ export default function ReciepesList({ loginData }) {
     if (loginData?.userGroup == "SystemUser") {
       getFavoritesList();
     }
-  }, []);
+  }, [loginData]);
   return (
     <>
       <Modal show={showDelete} onHide={handleCloseDelete}>
