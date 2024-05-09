@@ -20,9 +20,9 @@ export default function EditRecipeData() {
   } = useForm();
 
   const { recipeId } = useParams();
-  const handleEditSora=(input)=>{
-console.log(input.target.value);
-  }
+  const handleEditImage = (input) => {
+    console.log(input.target.value);
+  };
 
   const getReciepe = async () => {
     try {
@@ -32,15 +32,15 @@ console.log(input.target.value);
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      console.log(response.data);
+
       setReciepe(response.data);
       reset({
         name: response.data.name,
         price: response.data.price,
         description: response.data.description,
         tag: response.data.tag,
-        category:response.data.category[0].name,
-        imagePath:response.data.imagePath,
+        category: response.data.category[0].name,
+        imagePath: response.data.imagePath,
       });
     } catch (err) {
       console.log(err);
@@ -59,7 +59,6 @@ console.log(input.target.value);
 
   const onSubmit = async (data) => {
     let recipeFormData = appendToFormData(data);
-
     try {
       const response = await axios.put(
         `https://upskilling-egypt.com:3006/api/v1/Recipe/${recipeId}`,
@@ -68,8 +67,8 @@ console.log(input.target.value);
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      console.log(response);
-      toast.success('Reciepe Edited Successfully');
+
+      toast.success("Reciepe Edited Successfully");
       navigate("/dashboard/reciepes");
     } catch (err) {
       console.log(err);
@@ -102,6 +101,7 @@ console.log(input.target.value);
       console.log(error);
     }
   };
+
   useEffect(() => {
     getCategories();
     getTags();
@@ -206,7 +206,11 @@ console.log(input.target.value);
             <label htmlFor="uploadFile" className="file-lable">
               <div className="d-flex w-100 flex-column  justify-content-center  align-items-center ">
                 <i className="fa fa-upload "></i>
-                <div className="m-2 fw-bold">{recipe?.imagePath}</div>
+                <div className="m-2 fw-bold">
+                  {recipe.imagePath
+                    ? recipe?.imagePath
+                    : `files/users/images/NoData.png`}
+                </div>
               </div>
               <input
                 type="file"
@@ -214,8 +218,9 @@ console.log(input.target.value);
                 id="uploadFile"
                 {...register("recipeImage", {
                   required: "recipeImage is Required",
+              
                 })}
-             onChange={handleEditSora}
+                onChange={handleEditImage}
               />
             </label>
           </div>

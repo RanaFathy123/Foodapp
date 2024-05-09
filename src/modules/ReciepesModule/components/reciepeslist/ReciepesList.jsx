@@ -8,6 +8,7 @@ import noDataImg from "../../../../assets/images/no-data.png";
 import DeleteData from "../../../SharedModule/components/DeleteData/DeleteData";
 import Header from "../../../SharedModule/components/Header/Header";
 import NoData from "../../../SharedModule/components/NoData/NoData";
+import Loading from "../../../SharedModule/components/Loading/Loading";
 
 export default function ReciepesList({ loginData }) {
   const [reciepesList, setReciepesList] = useState([]);
@@ -181,6 +182,7 @@ export default function ReciepesList({ loginData }) {
       getFavoritesList();
     }
   }, [loginData]);
+
   return (
     <>
       <Modal show={showDelete} onHide={handleCloseDelete}>
@@ -237,6 +239,7 @@ export default function ReciepesList({ loginData }) {
         }
         imgUrl={reciepeHeaderImg}
       />
+
       <div className="container-fluid mt-3 mb-2 px-4 w-150">
         <div className="d-flex flex-wrap justify-content-between  align-items-center ">
           <div>
@@ -257,6 +260,7 @@ export default function ReciepesList({ loginData }) {
           </div>
         </div>
       </div>
+
       <div className="container-fluid my-3">
         <div className="row">
           <div className="col-md-6">
@@ -299,6 +303,7 @@ export default function ReciepesList({ loginData }) {
           </div>
         </div>
       </div>
+
       <div className="table-responsive  px-3 border-none ">
         <table className="table align-middle mb-0 rounded p-5 w-150 table-borderless">
           <thead className="bg-primary text-white bg-info h-150 table-secondary  p-5">

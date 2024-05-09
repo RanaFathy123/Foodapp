@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from "react";
-import Header from "../SharedModule/components/Header/Header";
-import reciepeHeaderImg from "../../assets/images/header.png";
 import axios from "axios";
-import noDataImg from "../../assets/images/no-data.png";
-import { toast } from "react-toastify";
-import NoData from "../SharedModule/components/NoData/NoData";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import reciepeHeaderImg from "../../assets/images/header.png";
+import noDataImg from "../../assets/images/no-data.png";
+import Header from "../SharedModule/components/Header/Header";
+import NoData from "../SharedModule/components/NoData/NoData";
+
+import "react-responsive-pagination/themes/classic.css";
 
 export default function Favorites() {
   const [favoritesList, setFavoritesList] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+
 
   const getFavoritesList = async () => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:3006/api/v1/userRecipe",
+        `https://upskilling-egypt.com:3006/api/v1/userRecipe/?pageSize=15&pageNumber=1`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
+      console.log(response.data);
+      setTotalPages(response.data.totalNumberOfPages);
       setFavoritesList(response.data.data);
     } catch (error) {
       console.log(error);
@@ -36,9 +42,8 @@ export default function Favorites() {
         }
       );
       toast.error("Reciepe Deleted From Your Favorite");
-      navigate('/dashboard/reciepes')
+      navigate("/dashboard/reciepes");
       getFavoritesList();
-      
     } catch (error) {
       console.log(error);
     }
@@ -55,7 +60,6 @@ export default function Favorites() {
         }
         imgUrl={reciepeHeaderImg}
       />
-
       <div className="d-flex flex-wrap justify-content-center gap-3 align-items-center mt-5 ">
         {favoritesList.length > 0 ? (
           favoritesList.map((favorite) => (
@@ -83,6 +87,7 @@ export default function Favorites() {
               <span
                 className="position-absolute top-0 end-0 mt-2 me-2 border border-2 px-2 rounded"
                 onClick={() => deleteFavorite(favorite)}
+                title="Delete From Favorites"
               >
                 <i className="fas fa-heart text-success"></i>
               </span>
