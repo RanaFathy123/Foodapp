@@ -12,8 +12,6 @@ import "react-responsive-pagination/themes/classic.css";
 export default function Favorites() {
   const [favoritesList, setFavoritesList] = useState([]);
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(1);
-
 
   const getFavoritesList = async () => {
     try {
@@ -23,9 +21,13 @@ export default function Favorites() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      console.log(response.data);
-    
-      setFavoritesList(response.data.data);
+      console.log(response.data.data);
+      let favList = response.data.data.map((fav) => {
+        return { ...fav, checkColor: true };
+      });
+
+
+      setFavoritesList(favList);
     } catch (error) {
       console.log(error);
     }
@@ -41,8 +43,16 @@ export default function Favorites() {
           },
         }
       );
+      console.log(favoritesList);
+      let favoriteListChanged = favoritesList.map((fav) => {
+        if (fav.id == favorite.id) {
+          fav.checkColor = false;
+        }
+        return fav;
+      });
+      setFavoritesList(favoriteListChanged)
       toast.error("Reciepe Deleted From Your Favorite");
-      navigate("/dashboard/reciepes");
+      // navigate("/dashboard/reciepes");
       getFavoritesList();
     } catch (error) {
       console.log(error);
@@ -89,7 +99,11 @@ export default function Favorites() {
                 onClick={() => deleteFavorite(favorite)}
                 title="Delete From Favorites"
               >
-                <i className="fas fa-heart text-success"></i>
+                {favorite.checkColor ? (
+                  <i className="fas fa-heart text-success"></i>
+                ) : (
+                  <i className="fas fa-heart text-secondary"></i>
+                )}
               </span>
               <div className="card-body">
                 <p className="card-text">
