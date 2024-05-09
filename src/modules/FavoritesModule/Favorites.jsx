@@ -24,7 +24,7 @@ export default function Favorites() {
         }
       );
       console.log(response.data);
-      setTotalPages(response.data.totalNumberOfPages);
+    
       setFavoritesList(response.data.data);
     } catch (error) {
       console.log(error);
