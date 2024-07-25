@@ -3,7 +3,7 @@ import adminImg from "../../../../assets/images/avatar.png";
 
 export default function NavBar({ loginData }) {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light p-0 mb-3">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light p-0 mb-3 fixed-top">
       <div className="container-fluid">
         <button
           className="navbar-toggler ms-auto "
@@ -31,7 +31,7 @@ export default function NavBar({ loginData }) {
               </a>
             </li>
             <li className="nav-item p-1">
-           <i className="fa-solid fa-bell" />
+              <i className="fa-solid fa-bell" />
             </li>
           </ul>
         </div>

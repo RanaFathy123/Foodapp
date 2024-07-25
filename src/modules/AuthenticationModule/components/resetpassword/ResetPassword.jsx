@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../../assets/images/logo.svg";
+import { axiosInstance } from "../../../../axiosConfig/axiosInstance";
 
 export default function ResetPassword() {
   const [checkShowPassword, setCheckShowPassword] = useState(false);
@@ -21,8 +22,8 @@ export default function ResetPassword() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Users/Reset",
+      const response = await axiosInstance.post(
+        "/Users/Reset",
         resgiterFormData
       );
       console.log(response);

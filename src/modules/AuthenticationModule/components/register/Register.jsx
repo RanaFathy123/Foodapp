@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../../assets/images/logo.svg";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { axiosInstance } from "../../../../axiosConfig/axiosInstance";
 export default function Register() {
   const [checkShowPassword, setCheckShowPassword] = useState(false);
   const [checkShowConfirmPassword, setCheckShowConfirmPassword] =
@@ -38,8 +39,8 @@ export default function Register() {
   const onSubmit = async (data) => {
     let resgiterFormData = appendToFormData(data);
     try {
-      const response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Users/Register",
+      const response = await axiosInstance.post(
+        "/Users/Register",
         resgiterFormData
       );
       console.log(response);
@@ -177,6 +178,12 @@ export default function Register() {
                               value: 6,
                               message: "Password Must Be 6 Character",
                             },
+                            pattern: {
+                              value:
+                                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+                              message:
+                                "Password must include at least one lowercase letter, one uppercase letter, one number, and one special character",
+                            },
                           })}
                         />
                         <span className="input-group-text" id="basic-addon1">
@@ -213,6 +220,12 @@ export default function Register() {
                             minLength: {
                               value: 6,
                               message: "Password Must Be 6 Character",
+                            },
+                            pattern: {
+                              value:
+                                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+                              message:
+                                "Confirm Password must include at least one lowercase letter, one uppercase letter, one number, and one special character",
                             },
                             validate: (value) =>
                               watch("password") == value ||

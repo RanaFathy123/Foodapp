@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ReciepeListHeader } from "../../../SharedModule/components/ReciepeListHeader/ReciepeListHeader";
+import { protectedAxiosInstace } from "../../../../axiosConfig/axiosInstance";
 
 export default function ReciepeData() {
   const [categoriesList, setCategoriesList] = useState([]);
@@ -36,12 +37,10 @@ export default function ReciepeData() {
   const onSubmit = async (data) => {
     let recipeFormData = appendToFormData(data);
     try {
-      const response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Recipe",
+      const response = await protectedAxiosInstace.post(
+        "/Recipe",
         recipeFormData,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
+
       );
       console.log(response);
       toast.success(response.data.message);

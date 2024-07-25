@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../../assets/images/logo.svg";
-
+import { axiosInstance } from "../../../../axiosConfig/axiosInstance";
 export default function VerfiyAccount() {
   const [checkShowPassword, setCheckShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,8 +21,8 @@ export default function VerfiyAccount() {
     console.log(data);
     setIsLoading(true);
     try {
-      const response = await axios.put(
-        "https://upskilling-egypt.com:3006/api/v1/Users/verify",
+      const response = await axiosInstance.put(
+        "/Users/verify",
         data
       );
       console.log(response);

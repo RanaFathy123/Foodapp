@@ -6,8 +6,12 @@ import toogler from "../../../../assets/images/3.png";
 import Modal from "react-bootstrap/Modal";
 import ChangePassword from "../../../AuthenticationModule/components/changepassword/ChangePassword";
 
-export default function SideBar({ setLoginData, loginData }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+export default function SideBar({
+  setLoginData,
+  loginData,
+  isCollapsed,
+  setIsCollapsed,
+}) {
   const [toggled, setToggled] = useState(false);
   const [show, setShow] = useState(false);
 
@@ -80,18 +84,26 @@ export default function SideBar({ setLoginData, loginData }) {
             >
               Recipes
             </MenuItem>
-            { loginData?.userGroup == "SuperAdmin"?<MenuItem
-              icon={<i className="fa-solid fa-calendar-days" />}
-              component={<Link to="/dashboard/categories" />}
-            >
-              Categories
-            </MenuItem>:''}
-            {loginData?.userGroup == "SystemUser" ?<MenuItem
-              icon={<i className="fa-regular fa-heart"></i>}
-              component={<Link to="/dashboard/favorites" />}
-            >
-              Favorites
-            </MenuItem>:''}
+            {loginData?.userGroup == "SuperAdmin" ? (
+              <MenuItem
+                icon={<i className="fa-solid fa-calendar-days" />}
+                component={<Link to="/dashboard/categories" />}
+              >
+                Categories
+              </MenuItem>
+            ) : (
+              ""
+            )}
+            {loginData?.userGroup == "SystemUser" ? (
+              <MenuItem
+                icon={<i className="fa-regular fa-heart"></i>}
+                component={<Link to="/dashboard/favorites" />}
+              >
+                Favorites
+              </MenuItem>
+            ) : (
+              ""
+            )}
             <MenuItem
               onClick={handleShow}
               icon={<i className="fa-solid fa-lock-open" />}
@@ -106,13 +118,10 @@ export default function SideBar({ setLoginData, loginData }) {
             </MenuItem>
           </Menu>
         </Sidebar>
-
         <i
-          className="fa-solid fa-bars btn btn-dark"
+          className="fa-solid fa-bars btn btn-success  "
           onClick={() => setToggled(!toggled)}
         ></i>
-
-        {/* <button onClick={logOut} className='btn btn-danger'>LogOut</button> */}
       </div>
     </>
   );

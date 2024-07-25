@@ -5,6 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../../../../axiosConfig/axiosInstance";
 export default function ForgetPassword() {
   const {
     register,
@@ -14,8 +15,8 @@ export default function ForgetPassword() {
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Users/Reset/Request",
+      const response = await axiosInstance.post(
+        "/Users/Reset/Request",
         data
       );
       console.log(response);

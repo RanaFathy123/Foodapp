@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../../assets/images/logo.svg";
+import {axiosInstance} from "../../../../axiosConfig/axiosInstance";
 
 export default function Login({ saveLoginData }) {
   const [checkShowPassword, setCheckShowPassword] = useState(false);
@@ -19,8 +20,8 @@ export default function Login({ saveLoginData }) {
   const onSubmit = async (data) => {
     setIsLoading(true)
     try {
-      const response = await axios.post(
-        "https://upskilling-egypt.com:3006/api/v1/Users/Login",
+      const response = await axiosInstance.post(
+        "/Users/Login",
         data
       );
 

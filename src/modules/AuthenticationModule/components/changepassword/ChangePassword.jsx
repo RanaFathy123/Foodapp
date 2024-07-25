@@ -4,6 +4,7 @@ import logo from "../../../../assets/images/logo.svg";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance, protectedAxiosInstace } from "../../../../axiosConfig/axiosInstance";
 
 export default function ChangePassword({ logOut }) {
   const [checkShowPassword, setCheckShowPassword] = useState(false);
@@ -25,12 +26,10 @@ export default function ChangePassword({ logOut }) {
   };
   const onSubmit = async (data) => {
     try {
-      const response = await axios.put(
-        "https://upskilling-egypt.com:3006/api/v1/Users/ChangePassword",
+      const response = await protectedAxiosInstace.put(
+        "/Users/ChangePassword",
         data,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
+    
       );
       console.log(response);
       logOut();

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { protectedAxiosInstace } from "../../../../axiosConfig/axiosInstance";
 
 export default function EditRecipeData() {
   const [recipe, setReciepe] = useState({});
@@ -26,11 +27,8 @@ export default function EditRecipeData() {
 
   const getReciepe = async () => {
     try {
-      const response = await axios.get(
-        `https://upskilling-egypt.com:3006/api/v1/Recipe/${recipeId}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
+      const response = await protectedAxiosInstace.get(
+        `/Recipe/${recipeId}`,
       );
 
       setReciepe(response.data);
