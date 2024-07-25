@@ -85,6 +85,11 @@ export default function Register() {
                           placeholder="UserName"
                           {...register("userName", {
                             required: "userName is Required",
+                            pattern: {
+                              value:
+                                /^[A-Za-z]+\d+$/,
+                              message: "The userName must contain characters and end with numbers",
+                            },
                           })}
                         />
                       </div>
