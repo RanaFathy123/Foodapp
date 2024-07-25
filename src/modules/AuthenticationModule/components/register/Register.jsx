@@ -85,6 +85,10 @@ export default function Register() {
                           placeholder="UserName"
                           {...register("userName", {
                             required: "userName is Required",
+                            maxLength: {
+                              value: 8,
+                              message: "The userName may not be greater than 8 characters",
+                            },
                             pattern: {
                               value:
                                 /^[A-Za-z]+\d+$/,
